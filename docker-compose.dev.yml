@@ -32,8 +32,6 @@ services:
     volumes:
       - ${NGINX_CONFIG_PATH}:/etc/nginx/conf.d
       - ${NODE_APP_PATH}:/usr/share/nginx/html
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /var/www/certbot:/var/www/certbot
     ports:
       - "${NGINX_PORT}:80"
       - "443:443"
