@@ -40,3 +40,9 @@ services:
     depends_on:
       - nodejs
 
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/www/certbot:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email dominik.shp@googlemail.com --agree-tos --no-eff-email --staging -d backend.fotogalerie-wolfram-wildner.de -d www.backend.fotogalerie-wolfram-wildner.de
