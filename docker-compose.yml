@@ -2,11 +2,11 @@ version: '3'
 
 services:
   nodejs:
-    image: node:14
-    working_dir: /app
-    volumes:
-      - ${NODE_APP_PATH}:/app
-    command: npm start
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    ports:
+      - "3000:3000"
 
   postgres:
     image: postgres:13
