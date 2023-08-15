@@ -16,9 +16,9 @@ jobs:
     - name: Deploy to server
       env:
         DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-        HOST: ${SERVER_HOST}
-        USER: ${SERVER_USER}
-        PORT: ${SERVER_PORT}
+        HOST: ${{ secrets.SERVER_HOST }}
+        USER: ${{ secrets.SERVER_USER }}
+        PORT: ${{ secrets.SERVER_PORT }}
       run: |
         mkdir -p ~/.ssh/
         echo "$DEPLOY_SSH_KEY" > ~/.ssh/id_rsa
