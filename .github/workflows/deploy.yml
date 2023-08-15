@@ -24,4 +24,4 @@ jobs:
         echo "$DEPLOY_SSH_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts
-        ssh -p $PORT $USER@$HOST 'cd /home && git pull && docker-compose restart'
+        ssh -p $PORT $USER@$HOST 'cd /home/wolfram-backend && git pull && docker-compose restart'
