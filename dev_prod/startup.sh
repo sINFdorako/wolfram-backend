@@ -18,10 +18,5 @@ else
     exit 1
 fi
 
-# Build node image only if it doesn't exist already
-if [ -z "$(docker images -q nodejs)" ]; then
-    docker build -t nodejs -f ../Dockerfile.node .
-fi
-
 # Start containers
 docker-compose -f ../docker-compose.prod.yml  up
