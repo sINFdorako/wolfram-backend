@@ -45,4 +45,4 @@ services:
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    command: certonly --webroot --webroot-path=/var/www/certbot --email dominik.shp@googlemail.com --agree-tos --no-eff-email -d backend.fotogalerie-wolfram-wildner.de -d www.backend.fotogalerie-wolfram-wildner.de
