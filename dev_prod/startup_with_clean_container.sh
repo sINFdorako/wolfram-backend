@@ -13,13 +13,13 @@ if [ -z "$CONTAINER_NAME" ]; then
 fi
 
 # Stop and remove the container
-docker-compose stop $CONTAINER_NAME
-docker-compose rm -f $CONTAINER_NAME
+docker-compose -f ../docker-compose.prod.yml stop $CONTAINER_NAME
+docker-compose -f ../docker-compose.prod.yml rm -f $CONTAINER_NAME
 
 # Rebuild the container
-docker-compose build $CONTAINER_NAME
+docker-compose -f ../docker-compose.prod.yml build $CONTAINER_NAME
 
 # Start the container again
-docker-compose up -d $CONTAINER_NAME
+docker-compose -f ../docker-compose.prod.yml up -d $CONTAINER_NAME
 
 echo "Container $CONTAINER_NAME has been rebuilt and restarted."

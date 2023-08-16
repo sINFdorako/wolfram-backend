@@ -10,18 +10,18 @@ fi
 
 # Set nginx configuration based on the ENVIRONMENT variable
 if [ "$ENVIRONMENT" == "production" ]; then
-    cp nginx-config/nginx-prod.conf nginx-config/default.conf
+    cp nginx-prod.conf ../nginx-config/default.conf
 elif [ "$ENVIRONMENT" == "local" ]; then
-    cp nginx-config/nginx-local.conf nginx-config/default.conf
+    cp ../dev_local/nginx-local.conf ../nginx-config/default.conf
 else
     echo "Error: Invalid ENVIRONMENT value. Please set it to either 'production' or 'local'."
     exit 1
 fi
 
 # Build node image only if it doesn't exist already
-if [ -z "$(docker images -q custom-node-image)" ]; then
-    docker build -t custom-node-image -f Dockerfile.node .
+if [ -z "$(docker images -q nodejs)" ]; then
+    docker build -t nodejs -f ../Dockerfile.node .
 fi
 
 # Start containers
-docker-compose up
+docker-compose -f ../docker-compose.prod.yml  up
