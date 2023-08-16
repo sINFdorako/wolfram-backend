@@ -32,8 +32,8 @@ services:
     volumes:
       - ${NGINX_CONFIG_PATH}:/etc/nginx/conf.d
       - ${NODE_APP_PATH}:/usr/share/nginx/html
-      - ./certbot/www:/var/www/certbot/
-      - ./certbot/conf/:/etc/nginx/ssl/
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
       - "443:443"
