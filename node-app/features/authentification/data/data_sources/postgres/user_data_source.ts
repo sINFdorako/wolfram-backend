@@ -6,12 +6,11 @@ export class UserDataSource {
 
     constructor() {
         this.db = new Pool({
-            // your db configurations here, like:
-            // user: 'your_username',
-            // host: 'localhost',
-            // database: 'your_database_name',
-            // password: 'your_password',
-            // port: 5432,
+            user: process.env.POSTGRES_USER,
+            host: process.env.POSTGRES_HOST,
+            database: process.env.POSTGRES_DB,
+            password: process.env.POSTGRES_PASSWORD,
+            port: parseInt(process.env.POSTGRES_PORT as string, 10) // convert the port from string to number
         });
     }
 
