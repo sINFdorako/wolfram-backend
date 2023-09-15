@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { LoginUser } from '../../domain/usecases/login_user';
+import { RegisterUser } from '../../domain/usecases/register_user';
+import bcrypt from 'bcrypt';
 
 export class AuthController {
-    constructor(private loginUser: LoginUser) {}
+    constructor(private loginUser: LoginUser, private registerUser: RegisterUser) { }
 
-    async login(req: Request, res: Response) {
+    login = async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body;
             const user = await this.loginUser.execute(email, password);
@@ -15,10 +17,14 @@ export class AuthController {
                 return res.status(401).json({ error: 'Invalid email or password.' });
             }
 
-            // Handle successful login.
-            const secretKey = process.env.JWT_SECRET || 'your_secret_key'; // It's better to store secret keys in .env files.
+            const secretKey = process.env.JWT_SECRET;
+
+            if (!secretKey) {
+                throw new Error('JWT_SECRET is not defined in the environment variables.');
+            }
+
             const token = jwt.sign({ id: user.id, email: user.email }, secretKey, {
-                expiresIn: '1h' // Token expiration time. Adjust as needed.
+                expiresIn: '1h'
             });
 
             res.json({ token });
@@ -29,7 +35,35 @@ export class AuthController {
         }
     }
 
-    public getLoginPage(req: Request, res: Response): void {
-        res.render('login');
+    register = async (req: Request, res: Response) => {
+        try {
+            const { email, password } = req.body;
+    
+            // Validate input (basic example; consider using a library for robust validation)
+            if (!email || !password) {
+                return res.status(400).json({ error: 'Email and password are required.' });
+            }
+    
+            // Hash password
+            const hashedPassword = await bcrypt.hash(password, 10);
+    
+            const user = await this.registerUser.execute(email, hashedPassword);
+    
+            const secretKey = process.env.JWT_SECRET;
+            if (!secretKey) {
+                throw new Error('JWT_SECRET is not defined in the environment variables.');
+            }
+    
+            const token = jwt.sign({ id: user.id, email: user.email }, secretKey, {
+                expiresIn: '1h'
+            });
+    
+            res.json({ token });
+    
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'An error occurred during registration.' });
+        }
     }
+    
 }

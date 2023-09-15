@@ -1,8 +1,9 @@
 import { User } from '../entities/user';
-import { UserPostgresRepository } from '../../data/repositories/postgres/user_postgres_repository';
+import { UserRepository } from '../respositories/user_repository';
+import * as bcrypt from 'bcrypt';
 
 export class LoginUser {
-    constructor(private userRepository: UserPostgresRepository) {}
+    constructor(private userRepository: UserRepository) {}
 
     async execute(email: string, password: string): Promise<User | null> {
         const user = await this.userRepository.getUserByEmail(email);
@@ -11,8 +12,9 @@ export class LoginUser {
             throw new Error('User not found');
         }
 
-        // Simplistic password check. IMPORTANT: Use a library like bcrypt in real-world scenarios.
-        if (user.password !== password) {
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
             throw new Error('Invalid password');
         }
 
