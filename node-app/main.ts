@@ -16,6 +16,8 @@ import path from 'path';
 import { extractUser } from './core/middleware/extract_user';
 dotenv.config();
 
+export const UPLOADS_PATH = path.resolve(__dirname, '..', 'uploads');
+
 const app: express.Application = express();
 const port: number = 3000;
 
@@ -35,7 +37,7 @@ app.set('views', path.join(__dirname, './features/authentification/presentation/
 app.use('/auth', authRoutes);
 app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
-app.use('/uploads', express)
+app.use('/uploads', express.static(UPLOADS_PATH));
 app.use(express.static(__dirname));
 
 // Synchronisieren der Modelle mit der Datenbank
