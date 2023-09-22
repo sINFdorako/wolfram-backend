@@ -1,4 +1,4 @@
-import { User } from '../entities/user';
+import { User, UserRole } from '../entities/user';
 import { UserRepository } from '../respositories/user_repository';
 
 export class RegisterUser {
