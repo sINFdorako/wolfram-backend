@@ -1,28 +1,23 @@
-import bcrypt from 'bcrypt';
 import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
 import { UserRepository } from '../domain/respositories/user_repository';
+import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
+
+const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET
+};
 
 export function configurePassport(userRepository: UserRepository) {
-    passport.use(new LocalStrategy(
-        async (username, password, done) => {
-            try {
-                const user = await userRepository.getUserByEmail(username);
-                
-                if (!user) {
-                    return done(null, false, { message: 'Falscher Benutzername.' });
-                }
-
-                const isPasswordValid = await bcrypt.compare(password, user.password);
-                
-                if (!isPasswordValid) {
-                    return done(null, false, { message: 'Falsches Passwort.' });
-                }
-                
+    passport.use(new JWTStrategy(jwtOptions, async (jwtPayload: any, done: any) => {
+        try {
+            const user = await userRepository.getUserById(jwtPayload.id);
+            if (user) {
                 return done(null, user);
-            } catch (err) {
-                return done(err);
+            } else {
+                return done(null, false);
             }
+        } catch (error) {
+            return done(error, false);
         }
-    ));
+    }));
 }

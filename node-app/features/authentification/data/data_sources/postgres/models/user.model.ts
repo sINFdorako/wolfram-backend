@@ -1,11 +1,13 @@
 // data/data_sources/postgres/models/user.model.ts
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../database';
+import { sequelize } from '../../../../../../core/database_config/database';
+import { UserRole } from '../../../../domain/entities/user';
 
 export class User extends Model {
   public id!: number; 
   public email!: string; 
   public password!: string; 
+  public role!: UserRole;
 }
 
 User.init(
@@ -24,6 +26,12 @@ User.init(
       type: new DataTypes.STRING(128),
       allowNull: false
     },
+    role: {
+      type: DataTypes.ENUM,
+      values: Object.values(UserRole),
+      allowNull: false,
+      defaultValue: UserRole.USER
+    }
   },
   {
     tableName: "users",

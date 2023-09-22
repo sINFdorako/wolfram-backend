@@ -5,6 +5,10 @@ import { UserPostgresRepository } from '../../data/repositories/postgres/user_po
 import { UserDataSource } from '../../data/data_sources/postgres/user_data_source';
 import { RegisterUser } from '../../domain/usecases/register_user';
 import { AuthController } from '../controllers/auth_controller';
+import { Request, Response } from 'express';
+import { GetUserById } from '../../domain/usecases/get_user_by_id';
+import { ensureAuthenticated, isSelfOrSuperAdmin, isSuperAdmin } from '../middlewares/auth_middleware';
+import { UpdateUser } from '../../domain/usecases/update_user';
 
 // Ein UserRepository erstellen (über ein konkretes Repository wie UserPostgresRepository)
 const dataSource = new UserDataSource();
@@ -12,18 +16,19 @@ const userRepo: UserRepository = new UserPostgresRepository(dataSource);
 
 // Den Usecase initialisieren
 const loginUser: LoginUser = new LoginUser(userRepo);
-const registerUser: RegisterUser = new RegisterUser((userRepo));
-
+const registerUser: RegisterUser = new RegisterUser(userRepo);
+const getUserById: GetUserById = new GetUserById(userRepo);
+const updateUser: UpdateUser = new UpdateUser(userRepo);
 
 const router = express.Router();
 
-const authController = new AuthController(loginUser, registerUser);
+const authController = new AuthController(loginUser, registerUser, getUserById, updateUser);
 
 // Login post Route
 router.post('/login', authController.login);
 
 // Login get Route
-router.get('/login', (req, res) => {
+router.get('/login', (req: Request, res: Response) => {
     res.render('login');
 })
 
@@ -31,8 +36,14 @@ router.get('/login', (req, res) => {
 router.post('/register', authController.register);
 
 // register get route
-router.get('/register', (req, res) => {
+router.get('/register', (req: Request, res: Response) => {
     res.render('register')
 })
+
+// Benutzer ist authentifiziert und entweder der Benutzer selbst oder ein Superadmin kann auf user zugreifen
+router.get('/user/:id', ensureAuthenticated, isSelfOrSuperAdmin, authController.getUserByIdHandler);
+
+// Nur Superadmin kann den Benutzer aktualisieren
+router.put('/user/:id/role', ensureAuthenticated, isSuperAdmin, authController.updateUserRole);
 
 export default router;

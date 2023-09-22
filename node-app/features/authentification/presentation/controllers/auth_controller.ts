@@ -2,10 +2,12 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { LoginUser } from '../../domain/usecases/login_user';
 import { RegisterUser } from '../../domain/usecases/register_user';
+import { GetUserById } from '../../domain/usecases/get_user_by_id';
 import bcrypt from 'bcrypt';
+import { UpdateUser } from '../../domain/usecases/update_user';
 
 export class AuthController {
-    constructor(private loginUser: LoginUser, private registerUser: RegisterUser) { }
+    constructor(private loginUser: LoginUser, private registerUser: RegisterUser, private getUserById: GetUserById, private updateUser: UpdateUser) { }
 
     login = async (req: Request, res: Response) => {
         try {
@@ -14,24 +16,24 @@ export class AuthController {
 
             // If user is null or undefined, it means the credentials are incorrect.
             if (!user) {
-                return res.status(401).json({ error: 'Invalid email or password.' });
+                return res.status(401).json({ error: 'Invalid email or password' });
             }
 
             const secretKey = process.env.JWT_SECRET;
 
             if (!secretKey) {
-                throw new Error('JWT_SECRET is not defined in the environment variables.');
+                throw new Error('JWT_SECRET is not defined in the environment variables');
             }
 
-            const token = jwt.sign({ id: user.id, email: user.email }, secretKey, {
-                expiresIn: '1h'
+            const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, secretKey, {
+                expiresIn: '3h'
             });
 
             res.json({ token });
 
         } catch (error) {
             console.error(error); // Log the error for debugging.
-            res.status(500).json({ error: 'An error occurred during authentication.' });
+            res.status(500).json({ error: 'An error occurred during authentication' });
         }
     }
 
@@ -41,7 +43,7 @@ export class AuthController {
     
             // Validate input (basic example; consider using a library for robust validation)
             if (!email || !password) {
-                return res.status(400).json({ error: 'Email and password are required.' });
+                return res.status(400).json({ error: 'Email and password are required' });
             }
     
             // Hash password
@@ -51,18 +53,65 @@ export class AuthController {
     
             const secretKey = process.env.JWT_SECRET;
             if (!secretKey) {
-                throw new Error('JWT_SECRET is not defined in the environment variables.');
+                throw new Error('JWT_SECRET is not defined in the environment variables');
             }
     
-            const token = jwt.sign({ id: user.id, email: user.email }, secretKey, {
-                expiresIn: '1h'
+            const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, secretKey, {
+                expiresIn: '3h'
             });
     
             res.json({ token });
     
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: 'An error occurred during registration.' });
+            res.status(500).json({ error: 'An error occurred during registration' });
+        }
+    }
+
+    getUserByIdHandler = async (req: Request, res: Response) => {
+        try {
+            const userId = parseInt(req.params.id, 10);
+
+            if(isNaN(userId)) {
+                return res.status(400).send({message: 'Not a valid user id'})
+            }
+
+            const user = await this.getUserById.execute(userId);
+
+            if(!user) {
+                return res.status(404).send({message: 'No user found'})
+            }
+
+            res.status(200).send(user);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'An error occured during find user by id', error: error})
+        }
+    }
+
+    updateUserRole = async (req: Request, res: Response) => {
+        try {
+            const userId = parseInt(req.params.id, 10);
+            const { role } = req.body;
+
+            if (isNaN(userId)) {
+                return res.status(400).send({ message: 'Invalid user ID' });
+            }
+
+            const user = await this.getUserById.execute(userId);
+
+            if (!user) {
+                return res.status(404).send({ message: 'User not found' });
+            }
+
+            user.role = role; 
+
+            await this.updateUser.execute(user); 
+
+            res.status(200).send({ message: 'Role updated successfully', user });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: 'Failed to update user role', error });
         }
     }
     
