@@ -16,7 +16,7 @@ import path from 'path';
 import { extractUser } from './core/middleware/extract_user';
 dotenv.config();
 
-export const UPLOADS_PATH = path.resolve(__dirname, '..', 'uploads');
+export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
 
 const app: express.Application = express();
 const port: number = 3000;
