@@ -15,7 +15,7 @@ export class Image extends Model {
     public description?: string;
     public uploadDate!: Date;
     public lastModifiedDate!: Date;
-    public tags?: string;
+    public tags?: string[];
 
     // EXIF-Daten
     public cameraMake?: string;
@@ -82,7 +82,7 @@ Image.init(
             defaultValue: DataTypes.NOW,
         },
         tags: {
-            type: new DataTypes.STRING(1024),  // Für einfache Implementierung als CSV oder JSON
+            type: DataTypes.ARRAY(DataTypes.STRING),
             allowNull: true,
         },
         cameraMake: {

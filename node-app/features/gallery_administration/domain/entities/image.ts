@@ -1,5 +1,5 @@
 class Image {
-    id: number;  // Eindeutige ID für das Bild
+    id?: number;  // Eindeutige ID für das Bild
     userId: number; // Fremdschlüssel für den Benutzer, der das Bild hochgeladen hat
     categoryId: number; // Fremdschlüssel für die Kategorie, zu der dieses Bild gehört
     url: string; // URL des hochgeladenen Bildes (z. B. Pfad in einem Cloud-Speicher)
@@ -11,7 +11,7 @@ class Image {
     title?: string; // Bildtitel
     description?: string; // Beschreibung des Bildes
     uploadDate: Date; // Hochladedatum des Bildes
-    lastModifiedDate: Date; // Letztes Änderungsdatum des Bildes
+    lastModifiedDate?: Date; // Letztes Änderungsdatum des Bildes
     tags?: string[]; // Tags oder Schlagworte zum Bild
 
     // EXIF-Daten
@@ -28,8 +28,7 @@ class Image {
     copyright?: string; // Copyright-Informationen
     creationDate?: Date; // Erstellungsdatum des Bildes
 
-    constructor(id: number, userId: number, categoryId: number, url: string, filename: string, fileSize: number, mimeType: string, uploadDate: Date, lastModifiedDate: Date) {
-        this.id = id;
+    constructor( userId: number, categoryId: number, url: string, filename: string, fileSize: number, mimeType: string, uploadDate: Date, lastModifiedDate: Date) {
         this.userId = userId;
         this.categoryId = categoryId;
         this.url = url;
