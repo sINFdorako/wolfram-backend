@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.node
+    volumes:
+      - ./home/uploads:/home/uploads
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOST: ${POSTGRES_HOST}
