@@ -35,6 +35,8 @@ app.set('views', path.join(__dirname, './features/authentification/presentation/
 app.use('/auth', authRoutes);
 app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
+app.use('/uploads', express)
+app.use(express.static(__dirname));
 
 // Synchronisieren der Modelle mit der Datenbank
 sequelize.sync().then(() => {
