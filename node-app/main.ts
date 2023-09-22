@@ -5,6 +5,7 @@ import { Category } from './features/gallery_administration/data/data_sources/po
 import { Image } from './features/gallery_administration/data/data_sources/postgres/models/image.model';
 import authRoutes from './features/authentification/presentation/routes/auth_routes'
 import categoryRoutes from './features/gallery_administration/presentation/routes/category_routes';
+import imageRoutes from './features/gallery_administration/presentation/routes/image_routes';
 import { UserPostgresRepository } from './features/authentification/data/repositories/postgres/user_postgres_repository'
 import { UserDataSource } from './features/authentification/data/data_sources/postgres/user_data_source';
 import { configurePassport } from './features/authentification/config/passportConfig';
@@ -12,6 +13,7 @@ import { sequelize } from './core/database_config/database';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
+import { extractUser } from './core/middleware/extract_user';
 dotenv.config();
 
 const app: express.Application = express();
@@ -31,7 +33,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './features/authentification/presentation/views')); 
 
 app.use('/auth', authRoutes);
-app.use('/category', categoryRoutes);
+app.use('/category', extractUser, categoryRoutes);
+app.use('/image', extractUser, imageRoutes);
 
 // Synchronisieren der Modelle mit der Datenbank
 sequelize.sync().then(() => {

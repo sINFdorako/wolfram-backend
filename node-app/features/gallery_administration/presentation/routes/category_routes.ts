@@ -3,7 +3,6 @@ import { CreateCategory } from '../../domain/usecases/create_category';
 import { CategoryRepository } from '../../data/repositories/category_repository';
 import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { Request, Response } from 'express';
-import { Jwt } from 'jsonwebtoken';
 
 const categoryRepository = new CategoryRepository();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
