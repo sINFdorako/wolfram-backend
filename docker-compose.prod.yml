@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.node
     volumes:
-      - ./home/uploads:/home/uploads
+      - ../uploads:/home/uploads
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOST: ${POSTGRES_HOST}
@@ -45,7 +45,7 @@ services:
       - ${NODE_APP_PATH}:/usr/share/nginx/html
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
-      - ./home/uploads:/home/uploads
+      - ../uploads:/home/uploads
     ports:
       - "80:80"
       - "443:443"
