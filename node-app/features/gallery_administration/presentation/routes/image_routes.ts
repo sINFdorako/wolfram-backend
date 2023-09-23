@@ -15,7 +15,7 @@ const uploadImageUseCase = new UploadImageUseCase(imageRepository);
 const getImagesByUser = new GetImagesByUser(imageRepository);
 const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);
 
-router.post('/uploads', ensureAuthenticated, upload.single('image'), async (req, res) => {
+router.post('/uploads/:categoryId', ensureAuthenticated, upload.single('image'), async (req, res) => {
     try {
         const file = req.file;
         if (!file) {
@@ -27,9 +27,17 @@ router.post('/uploads', ensureAuthenticated, upload.single('image'), async (req,
             return res.status(400).send({ message: 'User ID is missing' });
         }
 
+        const categoryId = Number(req.params.categoryId);
+
+        if (isNaN(categoryId)) {
+            return res.status(400).send({ message: 'Invalid category ID' });
+        }
+
+        console.log(file.originalname);
+      
         const image = new Image(
             req.user?.id,
-            1,
+            categoryId,
             `/uploads/${file.filename}`,
             file.filename,
             file.originalname,
@@ -66,7 +74,7 @@ router.post('/uploads', ensureAuthenticated, upload.single('image'), async (req,
 
         await uploadImageUseCase.execute(image);
 
-        res.send({ message: 'File was successfully uploaded', filename: file.filename });
+        res.send({ message: 'File was successfully uploaded', filename: file.originalname });
 
     } catch (error) {
         res.status(500).send({ message: 'An error occurred when uploading the file.', error });
