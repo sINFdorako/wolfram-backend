@@ -6,10 +6,12 @@ import { Request, Response } from 'express';
 
 const categoryRepository = new CategoryRepository();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
+const getCategoryById = new GetCategoryById(categoryRepository);
 
 const router = express.Router();
 
 import jwt from 'jsonwebtoken';
+import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
 
 router.post('/create', ensureAuthenticated, async (req: Request, res: Response) => {
   try {
@@ -27,9 +29,9 @@ router.post('/create', ensureAuthenticated, async (req: Request, res: Response) 
       return res.status(500).send({ message: 'Server configuration error' });
     }
 
-    const decodedPayload = jwt.verify(token, secretKey) as any;  
+    const decodedPayload = jwt.verify(token, secretKey) as any;
 
-    const userId = decodedPayload.id;  
+    const userId = decodedPayload.id;
 
     const { name, description } = req.body;
     const newCategory = await createCategoryUsecase.execute(userId, name, description);
@@ -39,6 +41,49 @@ router.post('/create', ensureAuthenticated, async (req: Request, res: Response) 
     res.status(500).send({ message: 'Error creating category', error });
   }
 });
+
+router.get('/:categoryId', ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user?.id) {
+      return res.status(400).send({ message: 'User ID is missing' });
+  }
+
+  const userId = req.user.id;
+  const categoryId = Number(req.params.categoryId);
+
+  if (isNaN(categoryId)) {
+      return res.status(400).send({ message: 'Invalid category ID' });
+  }
+
+  const category = await getCategoryById.execute(userId, categoryId);
+
+  if (!category) {
+      return res.status(404).send({ message: 'Category not found.' });
+  }
+
+  res.send(category);
+});
+
+router.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user?.id) {
+      return res.status(400).send({ message: 'User ID is missing' });
+  }
+
+  const userId = req.user.id;
+  const categoryId = Number(req.params.categoryId);
+
+  if (isNaN(categoryId)) {
+      return res.status(400).send({ message: 'Invalid category ID' });
+  }
+
+  const category = await getCategoryById.execute(userId, categoryId);
+
+  if (!category) {
+      return res.status(404).send({ message: 'Category not found.' });
+  }
+
+  res.send(category);
+});
+
 
 
 export default router;
