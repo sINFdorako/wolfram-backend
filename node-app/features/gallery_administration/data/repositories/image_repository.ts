@@ -23,6 +23,7 @@ function imageModelToEntity(model: any): Image {
         model.categoryId,
         model.url,
         model.filename,
+        model.originalFilename,
         model.fileSize,
         model.mimeType,
         model.uploadDate,
@@ -59,6 +60,7 @@ function imageEntityToModel(image: Image): any {
         categoryId: image.categoryId,
         url: image.url,
         filename: image.filename,
+        originalFileName: image.originalFilename,
         fileSize: image.fileSize,
         mimeType: image.mimeType,
 

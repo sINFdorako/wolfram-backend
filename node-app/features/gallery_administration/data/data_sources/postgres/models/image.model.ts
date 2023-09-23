@@ -9,6 +9,7 @@ export class Image extends Model {
     public categoryId!: number;
     public url!: string;
     public filename!: string;
+    public originalFilename!: string;
     public fileSize!: number;
     public mimeType!: string;
     public title?: string;
@@ -52,6 +53,10 @@ Image.init(
             allowNull: false,
         },
         filename: {
+            type: new DataTypes.STRING(255),
+            allowNull: false,
+        },
+        originalFilename: {
             type: new DataTypes.STRING(255),
             allowNull: false,
         },
