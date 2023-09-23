@@ -2,6 +2,7 @@ import express from 'express';
 import { CreateCategory } from '../../domain/usecases/create_category';
 import { CategoryRepository } from '../../data/repositories/category_repository';
 import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
+import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
 import { Request, Response } from 'express';
 
 const categoryRepository = new CategoryRepository();
@@ -11,7 +12,6 @@ const getCategoryById = new GetCategoryById(categoryRepository);
 const router = express.Router();
 
 import jwt from 'jsonwebtoken';
-import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
 
 router.post('/create', ensureAuthenticated, async (req: Request, res: Response) => {
   try {
