@@ -4,6 +4,7 @@ class Image {
     categoryId: number; // Fremdschlüssel für die Kategorie, zu der dieses Bild gehört
     url: string; // URL des hochgeladenen Bildes (z. B. Pfad in einem Cloud-Speicher)
     filename: string; // Name der hochgeladenen Datei
+    originalFilename: string; // Orignaler Dateiname
     fileSize: number; // Dateigröße in Bytes
     mimeType: string; // MIME-Typ des Bildes, z.B. "image/jpeg"
     
@@ -28,11 +29,12 @@ class Image {
     copyright?: string; // Copyright-Informationen
     creationDate?: Date; // Erstellungsdatum des Bildes
 
-    constructor( userId: number, categoryId: number, url: string, filename: string, fileSize: number, mimeType: string, uploadDate: Date, lastModifiedDate: Date) {
+    constructor( userId: number, categoryId: number, url: string, filename: string, originalFilename: string, fileSize: number, mimeType: string, uploadDate: Date, lastModifiedDate: Date) {
         this.userId = userId;
         this.categoryId = categoryId;
         this.url = url;
         this.filename = filename;
+        this.originalFilename = originalFilename;
         this.fileSize = fileSize;
         this.mimeType = mimeType;
         this.uploadDate = uploadDate;
