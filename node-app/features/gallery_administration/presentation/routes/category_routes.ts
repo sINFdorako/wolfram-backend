@@ -3,11 +3,13 @@ import { CreateCategory } from '../../domain/usecases/create_category';
 import { CategoryRepository } from '../../data/repositories/category_repository';
 import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
+import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories_by_user';
 import { Request, Response } from 'express';
 
 const categoryRepository = new CategoryRepository();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
 const getCategoryById = new GetCategoryById(categoryRepository);
+const getAllCategoriesByUser = new GetAllCategoriesByUser(categoryRepository);
 
 const router = express.Router();
 
@@ -69,13 +71,8 @@ router.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
   }
 
   const userId = req.user.id;
-  const categoryId = Number(req.params.categoryId);
 
-  if (isNaN(categoryId)) {
-      return res.status(400).send({ message: 'Invalid category ID' });
-  }
-
-  const category = await getCategoryById.execute(userId, categoryId);
+  const category = await getAllCategoriesByUser.execute(userId);
 
   if (!category) {
       return res.status(404).send({ message: 'Category not found.' });
@@ -83,7 +80,5 @@ router.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
 
   res.send(category);
 });
-
-
 
 export default router;

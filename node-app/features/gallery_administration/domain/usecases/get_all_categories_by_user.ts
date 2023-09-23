@@ -1,7 +1,7 @@
 import Category from "../entities/category";
 import { ICategoryRepository } from "../repositories/icategory_repository";
 
-export class getAllCategoriesByUser {
+export class GetAllCategoriesByUser {
     constructor(private icategoryRepository: ICategoryRepository) {}
 
     async execute(userId: number): Promise<Category[] | null> {

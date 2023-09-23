@@ -41,9 +41,9 @@ router.get('/register', (req: Request, res: Response) => {
 })
 
 // Benutzer ist authentifiziert und entweder der Benutzer selbst oder ein Superadmin kann auf user zugreifen
-router.get('/user/:id', ensureAuthenticated, isSelfOrSuperAdmin, authController.getUserByIdHandler);
+router.get('/user', ensureAuthenticated, isSelfOrSuperAdmin, authController.getUserByIdHandler);
 
 // Nur Superadmin kann den Benutzer aktualisieren
-router.put('/user/:id/update-role', ensureAuthenticated, isSuperAdmin, authController.updateUserRole);
+router.put('/user/update-role', ensureAuthenticated, isSuperAdmin, authController.updateUserRole);
 
 export default router;

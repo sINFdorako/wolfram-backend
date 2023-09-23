@@ -70,11 +70,11 @@ export class AuthController {
 
     getUserByIdHandler = async (req: Request, res: Response) => {
         try {
-            const userId = parseInt(req.params.id, 10);
-
-            if(isNaN(userId)) {
-                return res.status(400).send({message: 'Not a valid user id'})
+            if (!req.user?.id) {
+                return res.status(400).send({ message: 'User ID is missing' });
             }
+
+            const userId = req.user?.id;
 
             const user = await this.getUserById.execute(userId);
 
@@ -91,12 +91,13 @@ export class AuthController {
 
     updateUserRole = async (req: Request, res: Response) => {
         try {
-            const userId = parseInt(req.params.id, 10);
-            const { role } = req.body;
-
-            if (isNaN(userId)) {
-                return res.status(400).send({ message: 'Invalid user ID' });
+            if (!req.user?.id) {
+                return res.status(400).send({ message: 'User ID is missing' });
             }
+            
+            const userId = req.user?.id;
+            
+            const { role } = req.body;
 
             const user = await this.getUserById.execute(userId);
 
