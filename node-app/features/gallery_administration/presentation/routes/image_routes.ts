@@ -5,11 +5,15 @@ import { UploadImageUseCase } from '../../domain/usecases/upload_image';
 import { ImageRepository } from '../../data/repositories/image_repository';
 import Image from '../../domain/entities/image';
 import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
+import { GetImagesByUser } from '../../domain/usecases/get_images_by_user';
+import { GetImagesByUserAndCategory } from '../../domain/usecases/get_images_by_user_and_category';
 
 const router = Router();
 
 const imageRepository = new ImageRepository();
 const uploadImageUseCase = new UploadImageUseCase(imageRepository);
+const getImagesByUser = new GetImagesByUser(imageRepository);
+const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);
 
 router.post('/uploads', ensureAuthenticated, upload.single('image'), async (req, res) => {
     try {
@@ -65,6 +69,46 @@ router.post('/uploads', ensureAuthenticated, upload.single('image'), async (req,
 
     } catch (error) {
         res.status(500).send({ message: 'An error occurred when uploading the file.', error });
+    }
+});
+
+router.get('/uploads/:categoryId', ensureAuthenticated, async (req, res) => {
+    try {
+        if (!req.user?.id) {
+            return res.status(400).send({ message: 'User ID is missing' });
+        }
+
+        const userId = req.user.id;
+        const categoryId = Number(req.params.categoryId);
+
+        const images = await getImagesByUserAndCategory.execute(userId, categoryId);
+
+        if (!images || images.length === 0) {
+            return res.status(404).send({ message: 'No images found for this user and category' });
+        }
+
+        res.send(images);
+    } catch (error) {
+        res.status(500).send({ message: 'An error occurred when fetching the images.', error });
+    }
+});
+
+router.get('/uploads', ensureAuthenticated, async (req, res) => {
+    try {
+        if (!req.user?.id) {
+            return res.status(400).send({ message: 'User ID is missing' });
+        }
+        const userId = req.user.id; 
+
+        const images = await getImagesByUser.execute(userId);
+
+        if (!images || images.length === 0) {
+            return res.status(404).send({ message: 'No images found for this user' });
+        }
+
+        res.send(images);
+    } catch (error) {
+        res.status(500).send({ message: 'An error occurred when fetching the images.', error });
     }
 });
 
