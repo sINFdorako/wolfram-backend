@@ -60,7 +60,7 @@ function imageEntityToModel(image: Image): any {
         categoryId: image.categoryId,
         url: image.url,
         filename: image.filename,
-        originalFileName: image.originalFilename,
+        originalFilename: image.originalFilename,
         fileSize: image.fileSize,
         mimeType: image.mimeType,
 
