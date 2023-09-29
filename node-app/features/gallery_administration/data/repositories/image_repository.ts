@@ -1,8 +1,19 @@
 import Image from '../../domain/entities/image';
 import { IImageRepository } from '../../domain/repositories/iimage_repository';
 import { Image as ImageModel } from '../data_sources/postgres/models/image.model';
+import { Op } from 'sequelize';
 
 export class ImageRepository implements IImageRepository {
+    async deleteImages(userId: number, imageIds: number[]): Promise<void> {
+        await ImageModel.destroy({
+            where: {
+                userId: userId, 
+                id: {
+                    [Op.in]: imageIds 
+                }
+            }
+        });
+    }
     async getImagesByUserAndCategory(userId: number, categoryId: number): Promise<Image[]> {
         const images = await ImageModel.findAll({where: {userId, categoryId}});
         return images.map((e) => imageModelToEntity(e));
@@ -11,9 +22,10 @@ export class ImageRepository implements IImageRepository {
         const images = await ImageModel.findAll({ where: { userId } });
         return images.map((e) => imageModelToEntity(e));
     }
-    async createImage(image: Image): Promise<Image> {
-        const newImage = await ImageModel.create(imageEntityToModel(image));
-        return newImage;
+    async createImages(images: Image[]): Promise<Image[]> {
+        const imagesModelArray = images.map(img => imageEntityToModel(img));
+        const newImages = await ImageModel.bulkCreate(imagesModelArray);
+        return newImages;
     }
 }
 

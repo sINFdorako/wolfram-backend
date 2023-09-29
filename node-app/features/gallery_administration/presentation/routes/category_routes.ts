@@ -5,35 +5,25 @@ import { ensureAuthenticated } from '../../../authentification/presentation/midd
 import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
 import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories_by_user';
 import { Request, Response } from 'express';
+import { UpdateCategory } from '../../domain/usecases/update_category';
+import { DeleteCategories } from '../../domain/usecases/delete_categories';
 
 const categoryRepository = new CategoryRepository();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
 const getCategoryById = new GetCategoryById(categoryRepository);
 const getAllCategoriesByUser = new GetAllCategoriesByUser(categoryRepository);
+const updateCategory = new UpdateCategory(categoryRepository);
+const deleteCategories = new DeleteCategories(categoryRepository);
 
 const router = express.Router();
 
-import jwt from 'jsonwebtoken';
 
 router.post('/create', ensureAuthenticated, async (req: Request, res: Response) => {
   try {
-    // Extract the JWT token from the Authorization header
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send({ message: 'Authorization header missing' });
+    if (!req.user?.id) {
+      return res.status(400).send({ message: 'User ID is missing' });
     }
-
-    const token = authHeader.split(' ')[1];  // Extract token from "Bearer TOKEN"
-
-    // Verify and decode the token
-    const secretKey = process.env.JWT_SECRET;
-    if (!secretKey) {
-      return res.status(500).send({ message: 'Server configuration error' });
-    }
-
-    const decodedPayload = jwt.verify(token, secretKey) as any;
-
-    const userId = decodedPayload.id;
+    const userId = req.user.id;
 
     const { name, description } = req.body;
     const newCategory = await createCategoryUsecase.execute(userId, name, description);
@@ -44,22 +34,72 @@ router.post('/create', ensureAuthenticated, async (req: Request, res: Response) 
   }
 });
 
+router.put('/:categoryId', ensureAuthenticated, async (req: Request, res: Response) => {
+  try {
+    if (!req.user?.id) {
+      return res.status(400).send({ message: 'User ID is missing' });
+    }
+    const userId = req.user.id;
+
+    const categoryId = parseInt(req.params.categoryId);
+    if (isNaN(categoryId)) {
+      return res.status(400).send({ message: 'Invalid category ID' });
+    }
+
+    const { name, description } = req.body;
+    
+    // Assuming your use case method also needs the categoryId
+    const updatedCategory = await updateCategory.execute(userId, categoryId, name, description);
+    
+    res.status(200).send(updatedCategory);
+
+  } catch (error) {
+    res.status(500).send({ message: 'Error updating category', error });
+  }
+});
+
+
+router.delete('/', ensureAuthenticated, async (req: Request, res: Response) => {
+  try {
+    if (!req.user?.id) {
+      return res.status(400).send({ message: 'User ID is missing' });
+    }
+    const userId = req.user.id;
+
+    // Assuming the category IDs are coming in the body as an array of numbers
+    const categoryIds: number[] = req.body.categoryIds;
+
+    if (!categoryIds || categoryIds.length === 0) {
+      return res.status(400).send({ message: 'Category IDs are required' });
+    }
+
+    await deleteCategories.execute(userId, categoryIds);
+
+    // Return status 204 No Content for successful DELETE operations
+    res.status(204).send();
+
+  } catch (error) {
+    res.status(500).send({ message: 'Error deleting categories', error });
+  }
+});
+
+
 router.get('/:categoryId', ensureAuthenticated, async (req: Request, res: Response) => {
   if (!req.user?.id) {
-      return res.status(400).send({ message: 'User ID is missing' });
+    return res.status(400).send({ message: 'User ID is missing' });
   }
 
   const userId = req.user.id;
   const categoryId = Number(req.params.categoryId);
 
   if (isNaN(categoryId)) {
-      return res.status(400).send({ message: 'Invalid category ID' });
+    return res.status(400).send({ message: 'Invalid category ID' });
   }
 
   const category = await getCategoryById.execute(userId, categoryId);
 
   if (!category) {
-      return res.status(404).send({ message: 'Category not found.' });
+    return res.status(404).send({ message: 'Category not found.' });
   }
 
   res.send(category);
@@ -67,7 +107,7 @@ router.get('/:categoryId', ensureAuthenticated, async (req: Request, res: Respon
 
 router.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
   if (!req.user?.id) {
-      return res.status(400).send({ message: 'User ID is missing' });
+    return res.status(400).send({ message: 'User ID is missing' });
   }
 
   const userId = req.user.id;
@@ -75,7 +115,7 @@ router.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
   const category = await getAllCategoriesByUser.execute(userId);
 
   if (!category) {
-      return res.status(404).send({ message: 'Category not found.' });
+    return res.status(404).send({ message: 'Category not found.' });
   }
 
   res.send(category);
