@@ -92,7 +92,7 @@ router.delete('/', ensureAuthenticated, async (req: Request, res: Response) => {
     const imageIdsToDelete = imagesToDelete.map(image => image.id);
     const pathsToDelete = imagesToDelete.map(image => image.url);
 
-    const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de/image'; 
+    const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de'; 
 
     // Step 2: Use the image deletion logic
     if (imageIdsToDelete.length > 0) {
