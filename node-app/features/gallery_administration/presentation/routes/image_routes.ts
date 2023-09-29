@@ -21,8 +21,6 @@ const getImagesByUser = new GetImagesByUser(imageRepository);
 const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);
 const deleteImageIds = new DeleteImages(imageRepository);
 
-const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de'; 
-
 const multerErrorHandler = (err: any, req: any, res: any, next: any) => {
     if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
         return res.status(413).send({ message: 'Die Dateigröße überschreitet das Limit.' });
@@ -173,7 +171,7 @@ router.delete('/', ensureAuthenticated, async (req, res) => {
 
         // After the database operation, delete the actual image files.
         for(const relativePath of pathsToDelete) {
-            const fullPath = `${serverRoot}${relativePath}`;
+            const fullPath = `/home${relativePath}`;
             fs.unlink(fullPath, (err) => {
                 if(err) {
                     console.error(`Failed to delete file ${fullPath}: ${err}`);
