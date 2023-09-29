@@ -7,6 +7,7 @@ import Image from '../../domain/entities/image';
 import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetImagesByUser } from '../../domain/usecases/get_images_by_user';
 import { GetImagesByUserAndCategory } from '../../domain/usecases/get_images_by_user_and_category';
+import { DeleteImages } from '../../domain/usecases/delete_images';
 
 const router = Router();
 
@@ -14,72 +15,77 @@ const imageRepository = new ImageRepository();
 const uploadImageUseCase = new UploadImageUseCase(imageRepository);
 const getImagesByUser = new GetImagesByUser(imageRepository);
 const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);
+const deleteImageIds = new DeleteImages(imageRepository);
 
-router.post('/uploads/:categoryId', ensureAuthenticated, upload.single('image'), async (req, res) => {
+router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'), async (req, res) => {
     try {
-        const file = req.file;
-        if (!file) {
-            res.status(400).send({ message: 'Please choose a file to upload' });
+        const files = req.files as Express.Multer.File[];
+        
+        if (!files || files.length === 0) {
+            res.status(400).send({ message: 'Bitte wählen Sie Dateien zum Hochladen aus.' });
             return;
         }
 
         if (!req.user?.id) {
-            return res.status(400).send({ message: 'User ID is missing' });
+            return res.status(400).send({ message: 'Benutzer-ID fehlt.' });
         }
 
         const categoryId = Number(req.params.categoryId);
-
         if (isNaN(categoryId)) {
-            return res.status(400).send({ message: 'Invalid category ID' });
+            return res.status(400).send({ message: 'Ungültige Kategorie-ID' });
         }
 
-        console.log(file.originalname);
-      
-        const image = new Image(
-            req.user?.id,
-            categoryId,
-            `/uploads/${file.filename}`,
-            file.filename,
-            file.originalname,
-            file.size,
-            file.mimetype,
-            new Date(),
-            new Date()
-        );
+        let imagesToUpload = [];
+        let fileNamesProcessed = [];
 
-        // Metadaten extrahieren
-        const metadata = await exiftool.read(file.path);
+        for (const file of files) {
+            console.log(file.originalname);
 
-        // Hilfsfunktion, die null oder undefined überprüft
-        const isDefined = <T>(value: T | null | undefined): value is T => value !== null && value !== undefined;
+            const image = new Image(
+                req.user?.id,
+                categoryId,
+                `/uploads/${file.filename}`,
+                file.filename,
+                file.originalname,
+                file.size,
+                file.mimetype,
+                new Date(),
+                new Date()
+            );
 
-        // Befüllen von EXIF- und IPTC-Daten, sofern verfügbar
-        if (isDefined(metadata.Make)) image.cameraMake = metadata.Make;
-        if (isDefined(metadata.Model)) image.cameraModel = metadata.Model;
-        if (typeof metadata.ExposureTime === 'string') image.exposureTime = parseFloat(metadata.ExposureTime);
-        if (typeof metadata.FNumber === 'string') image.aperture = parseFloat(metadata.FNumber);
-        if (typeof metadata.ISO === 'string') image.iso = parseInt(metadata.ISO);
-        if (typeof metadata.FocalLength === 'string') image.focalLength = parseFloat(metadata.FocalLength);
-        if (isDefined(metadata.Flash)) image.flashUsed = metadata.Flash !== "0";
-        if (isDefined(metadata.Creator) && Array.isArray(metadata.Creator)) image.creator = metadata.Creator.join(', '); // Annahme, dass Creator ein Array ist und zu einem String konvertiert werden muss
-        if (isDefined(metadata.Copyright)) image.copyright = metadata.Copyright;
-        if (isDefined(metadata.CreateDate) && typeof metadata.CreateDate === 'string') image.creationDate = new Date(metadata.CreateDate);
-        if (isDefined(metadata.Title)) image.title = metadata.Title;
-        if (isDefined(metadata.Description)) image.description = metadata.Description;
+            // Extract metadata
+            const metadata = await exiftool.read(file.path);
+            const isDefined = <T>(value: T | null | undefined): value is T => value !== null && value !== undefined;
 
-        // Es ist möglich, dass die Tags in den Metadaten als Zeichenkette mit einem bestimmten Trennzeichen, z.B. "," oder ";", vorliegen. Hier teilen wir sie in ein Array von Strings.
-        if ((await exiftool.read(file.path)).Keywords) {
-            image.tags = ((await exiftool.read(file.path)).Keywords as string).split(',').map(tag => tag.trim());
+            if (isDefined(metadata.Make)) image.cameraMake = metadata.Make;
+            if (isDefined(metadata.Model)) image.cameraModel = metadata.Model;
+            if (typeof metadata.ExposureTime === 'string') image.exposureTime = parseFloat(metadata.ExposureTime);
+            if (typeof metadata.FNumber === 'string') image.aperture = parseFloat(metadata.FNumber);
+            if (typeof metadata.ISO === 'string') image.iso = parseInt(metadata.ISO);
+            if (typeof metadata.FocalLength === 'string') image.focalLength = parseFloat(metadata.FocalLength);
+            if (isDefined(metadata.Flash)) image.flashUsed = metadata.Flash !== "0";
+            if (isDefined(metadata.Creator) && Array.isArray(metadata.Creator)) image.creator = metadata.Creator.join(', ');
+            if (isDefined(metadata.Copyright)) image.copyright = metadata.Copyright;
+            if (isDefined(metadata.CreateDate) && typeof metadata.CreateDate === 'string') image.creationDate = new Date(metadata.CreateDate);
+            if (isDefined(metadata.Title)) image.title = metadata.Title;
+            if (isDefined(metadata.Description)) image.description = metadata.Description;
+
+            if (metadata.Keywords) {
+                image.tags = (metadata.Keywords as string).split(',').map(tag => tag.trim());
+            }
+
+            imagesToUpload.push(image);
+            fileNamesProcessed.push(file.originalname);
         }
 
-        await uploadImageUseCase.execute(image);
-
-        res.send({ message: 'File was successfully uploaded', filename: file.originalname });
+        await uploadImageUseCase.execute(imagesToUpload);
+        res.send({ message: 'Dateien wurden erfolgreich hochgeladen', filenames: fileNamesProcessed });
 
     } catch (error) {
-        res.status(500).send({ message: 'An error occurred when uploading the file.', error });
+        res.status(500).send({ message: 'Beim Hochladen der Dateien ist ein Fehler aufgetreten.', error });
     }
 });
+
 
 router.get('/uploads/:categoryId', ensureAuthenticated, async (req, res) => {
     try {
@@ -120,6 +126,29 @@ router.get('/uploads', ensureAuthenticated, async (req, res) => {
         res.status(500).send({ message: 'An error occurred when fetching the images.', error });
     }
 });
+
+router.delete('/', async (req, res) => {
+    try {
+        const imageIds = req.body.imageIds;
+        if (!req.user?.id) {
+            return res.status(400).send({ message: 'User ID is missing' });
+        }
+        const userId = req.user.id;
+        
+        if (!Array.isArray(imageIds) || !imageIds.length) {
+            res.status(400).send({ message: 'No image IDs provided.' });
+            return;
+        }
+        
+        await deleteImageIds.execute(userId, imageIds);
+        
+        res.send({ message: 'Images deleted successfully' });
+
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to delete images', error: error });
+    }
+});
+
 
 
 export default router;

@@ -4,9 +4,9 @@ import { IImageRepository } from '../repositories/iimage_repository';
 export class UploadImageUseCase {
     constructor(private imageRepository: IImageRepository) {}
 
-    async execute(imageData: Image): Promise<Image> {
+    async execute(imagesData: Image[]): Promise<Image[]> {
 
-        const savedImage = await this.imageRepository.createImage(imageData);
+        const savedImage = await this.imageRepository.createImages(imagesData);
 
         return savedImage;
     }
