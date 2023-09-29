@@ -92,14 +92,12 @@ router.delete('/', ensureAuthenticated, async (req: Request, res: Response) => {
     const imageIdsToDelete = imagesToDelete.map(image => image.id);
     const pathsToDelete = imagesToDelete.map(image => image.url);
 
-    const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de'; 
-
     // Step 2: Use the image deletion logic
     if (imageIdsToDelete.length > 0) {
       await deleteImageIds.execute(userId, imageIdsToDelete);
 
       for(const relativePath of pathsToDelete) {
-        const fullPath = `${serverRoot}${relativePath}`;
+        const fullPath = `/home${relativePath}`;
         fs.unlink(fullPath, (err) => {
           if(err) {
             console.error(`Failed to delete file ${fullPath}: ${err}`);
