@@ -3,7 +3,7 @@ import { Category } from '../data_sources/postgres/models/category.model';
 import { Op } from 'sequelize';
 
 export class CategoryRepository implements ICategoryRepository {
-  async updateCategory(userId: number, categoryId: number, name: string, description?: string | undefined): Promise<Category> {
+  async updateCategory(userId: number, name: string, categoryId: number,  description?: string | undefined): Promise<Category> {
     const category = await Category.findOne({
         where: {
             userId: userId,

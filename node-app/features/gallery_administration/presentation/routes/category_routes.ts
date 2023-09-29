@@ -49,7 +49,7 @@ router.put('/:categoryId', ensureAuthenticated, async (req: Request, res: Respon
     const { name, description } = req.body;
     
     // Assuming your use case method also needs the categoryId
-    const updatedCategory = await updateCategory.execute(userId, categoryId, name, description);
+    const updatedCategory = await updateCategory.execute(userId, name, categoryId, description);
     
     res.status(200).send(updatedCategory);
 
