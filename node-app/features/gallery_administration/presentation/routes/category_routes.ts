@@ -7,13 +7,20 @@ import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories
 import { Request, Response } from 'express';
 import { UpdateCategory } from '../../domain/usecases/update_category';
 import { DeleteCategories } from '../../domain/usecases/delete_categories';
+import { ImageRepository } from '../../data/repositories/image_repository';
+import { DeleteImages } from '../../domain/usecases/delete_images';
+import { Image as ImageModel } from '../../data/data_sources/postgres/models/image.model';
+import fs from 'fs';
+import { Op } from 'sequelize';
 
 const categoryRepository = new CategoryRepository();
+const imageRepository = new ImageRepository();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
 const getCategoryById = new GetCategoryById(categoryRepository);
 const getAllCategoriesByUser = new GetAllCategoriesByUser(categoryRepository);
 const updateCategory = new UpdateCategory(categoryRepository);
 const deleteCategories = new DeleteCategories(categoryRepository);
+const deleteImageIds = new DeleteImages(imageRepository);
 
 const router = express.Router();
 
@@ -73,6 +80,35 @@ router.delete('/', ensureAuthenticated, async (req: Request, res: Response) => {
       return res.status(400).send({ message: 'Category IDs are required' });
     }
 
+    // Step 1: Fetch image IDs associated with these categories
+    const imagesToDelete = await ImageModel.findAll({
+      where: {
+        categoryId: {
+          [Op.in]: categoryIds
+        }
+      }
+    });
+    
+    const imageIdsToDelete = imagesToDelete.map(image => image.id);
+    const pathsToDelete = imagesToDelete.map(image => image.url);
+
+    const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de/image'; 
+
+    // Step 2: Use the image deletion logic
+    if (imageIdsToDelete.length > 0) {
+      await deleteImageIds.execute(userId, imageIdsToDelete);
+
+      for(const relativePath of pathsToDelete) {
+        const fullPath = `${serverRoot}${relativePath}`;
+        fs.unlink(fullPath, (err) => {
+          if(err) {
+            console.error(`Failed to delete file ${fullPath}: ${err}`);
+          }
+        });
+      }
+    }
+
+    // Step 3: Delete the categories themselves
     await deleteCategories.execute(userId, categoryIds);
 
     // Return status 204 No Content for successful DELETE operations
@@ -82,6 +118,7 @@ router.delete('/', ensureAuthenticated, async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Error deleting categories', error });
   }
 });
+
 
 
 router.get('/:categoryId', ensureAuthenticated, async (req: Request, res: Response) => {
