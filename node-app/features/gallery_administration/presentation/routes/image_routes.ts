@@ -21,7 +21,7 @@ const getImagesByUser = new GetImagesByUser(imageRepository);
 const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);
 const deleteImageIds = new DeleteImages(imageRepository);
 
-const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de/image'; 
+const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de'; 
 
 const multerErrorHandler = (err: any, req: any, res: any, next: any) => {
     if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
