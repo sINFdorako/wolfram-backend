@@ -11,6 +11,7 @@ import { DeleteImages } from '../../domain/usecases/delete_images';
 import { Image as ImageModel } from '../../data/data_sources/postgres/models/image.model';
 import { Op } from 'sequelize';
 import fs from 'fs';
+import multer from 'multer';
 
 const router = Router();
 
@@ -21,6 +22,13 @@ const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepositor
 const deleteImageIds = new DeleteImages(imageRepository);
 
 const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de/image'; 
+
+const multerErrorHandler = (err: any, req: any, res: any, next: any) => {
+    if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).send({ message: 'Die Dateigröße überschreitet das Limit.' });
+    }
+    next(err);
+};
 
 router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'), async (req, res) => {
     try {
@@ -91,6 +99,7 @@ router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'
     }
 });
 
+router.use(multerErrorHandler);
 
 router.get('/uploads/:categoryId', ensureAuthenticated, async (req, res) => {
     try {
