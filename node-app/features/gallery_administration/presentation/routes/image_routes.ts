@@ -8,6 +8,9 @@ import { ensureAuthenticated } from '../../../authentification/presentation/midd
 import { GetImagesByUser } from '../../domain/usecases/get_images_by_user';
 import { GetImagesByUserAndCategory } from '../../domain/usecases/get_images_by_user_and_category';
 import { DeleteImages } from '../../domain/usecases/delete_images';
+import { Image as ImageModel } from '../../data/data_sources/postgres/models/image.model';
+import { Op } from 'sequelize';
+import fs from 'fs';
 
 const router = Router();
 
@@ -16,6 +19,8 @@ const uploadImageUseCase = new UploadImageUseCase(imageRepository);
 const getImagesByUser = new GetImagesByUser(imageRepository);
 const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);
 const deleteImageIds = new DeleteImages(imageRepository);
+
+const serverRoot = 'https://backend.fotogalerie-wolfram-wildner.de/image'; 
 
 router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'), async (req, res) => {
     try {
@@ -127,28 +132,51 @@ router.get('/uploads', ensureAuthenticated, async (req, res) => {
     }
 });
 
-router.delete('/', async (req, res) => {
+
+router.delete('/', ensureAuthenticated, async (req, res) => {
     try {
         const imageIds = req.body.imageIds;
+
         if (!req.user?.id) {
             return res.status(400).send({ message: 'User ID is missing' });
         }
+
         const userId = req.user.id;
-        
+
         if (!Array.isArray(imageIds) || !imageIds.length) {
             res.status(400).send({ message: 'No image IDs provided.' });
             return;
         }
-        
+
+        // First, get the paths of the image files from the database.
+        const imagesToDelete = await ImageModel.findAll({
+            where: {
+                id: {
+                    [Op.in]: imageIds
+                }
+            }
+        });
+
+        const pathsToDelete = imagesToDelete.map(image => image.url);
+
+        // Next, delete the records from the database
         await deleteImageIds.execute(userId, imageIds);
-        
+
+        // After the database operation, delete the actual image files.
+        for(const relativePath of pathsToDelete) {
+            const fullPath = `${serverRoot}${relativePath}`;
+            fs.unlink(fullPath, (err) => {
+                if(err) {
+                    console.error(`Failed to delete file ${fullPath}: ${err}`);
+                }
+            });
+        }
+
         res.send({ message: 'Images deleted successfully' });
 
     } catch (error) {
         res.status(500).send({ message: 'Failed to delete images', error: error });
     }
 });
-
-
 
 export default router;
