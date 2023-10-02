@@ -1,5 +1,31 @@
 import type { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
+import { User } from '../../data/data_sources/postgres/models/user.model';
+import { HashApiKey } from '../../domain/usecases/hash_api_key';
+
+export async function ensureApiKey(req: Request, res: Response, next: NextFunction) {
+    const apiKeyFromRequest = req.headers['x-api-key'] as string; 
+
+    if (!apiKeyFromRequest) {
+        return res.status(400).send({ message: 'API key is missing' });
+    }
+
+    const hashKey: HashApiKey = new HashApiKey(apiKeyFromRequest);
+
+    const hashedApiKeyFromRequest = hashKey.execute();
+
+    // Find the user with the corresponding hashed API key
+    const user = await User.findOne({ where: { apiKey: hashedApiKeyFromRequest } });
+
+    if (!user) {
+        return res.status(401).send({ message: 'Invalid API key' });
+    }
+
+    // If you found the user, attach them to the request object
+    req.user = user;
+
+    next();
+}
 
 export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
     passport.authenticate('jwt', { session: false }, (error: any, user: any) => {

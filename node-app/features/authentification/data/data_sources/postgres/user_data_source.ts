@@ -67,6 +67,19 @@ export class UserDataSource {
             role: userToUpdate.role
         };
     }
-    
+
+    async updateApiKey(userId: number, apiKeyHashed: string): Promise<void> {
+        const userToUpdate = await User.findByPk(userId);
+        if (!userToUpdate) {
+            throw new Error('User not found');
+        }
+
+        if(apiKeyHashed) {
+            userToUpdate.apiKey = apiKeyHashed;
+        }
+
+        await userToUpdate.save();
+
+    }
 
 }

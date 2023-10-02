@@ -4,7 +4,7 @@ import { exiftool } from 'exiftool-vendored';
 import { UploadImageUseCase } from '../../domain/usecases/upload_image';
 import { ImageRepository } from '../../data/repositories/image_repository';
 import Image from '../../domain/entities/image';
-import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
+import { ensureApiKey, ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetImagesByUser } from '../../domain/usecases/get_images_by_user';
 import { GetImagesByUserAndCategory } from '../../domain/usecases/get_images_by_user_and_category';
 import { DeleteImages } from '../../domain/usecases/delete_images';

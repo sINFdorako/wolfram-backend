@@ -1,7 +1,7 @@
 import express from 'express';
 import { CreateCategory } from '../../domain/usecases/create_category';
 import { CategoryRepository } from '../../data/repositories/category_repository';
-import { ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
+import { ensureApiKey, ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
 import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories_by_user';
 import { Request, Response } from 'express';
@@ -141,6 +141,22 @@ router.get('/:categoryId', ensureAuthenticated, async (req: Request, res: Respon
 });
 
 router.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user?.id) {
+    return res.status(400).send({ message: 'User ID is missing' });
+  }
+
+  const userId = req.user.id;
+
+  const category = await getAllCategoriesByUser.execute(userId);
+
+  if (!category) {
+    return res.status(404).send({ message: 'Category not found.' });
+  }
+
+  res.send(category);
+});
+
+router.get('/public', ensureApiKey, async (req: Request, res: Response) => {
   if (!req.user?.id) {
     return res.status(400).send({ message: 'User ID is missing' });
   }

@@ -8,6 +8,9 @@ export class UserPostgresRepository implements UserRepository {
     constructor(dataSource: UserDataSource) {
         this.dataSource = dataSource;
     }
+    async updateApiKey(userId: number, apiKeyHashed: string): Promise<void> {
+        return await this.dataSource.updateApiKey(userId, apiKeyHashed);
+    }
     async updateUser(user: User): Promise<User> {
         return await this.dataSource.updateUserInDB(user);
     }
