@@ -7,11 +7,13 @@ export class User {
     password: string;
     id?: number;
     role?: UserRole;
+    apiKey?: string;
 
-    constructor(email: string, password: string, role?: UserRole, id?: number) {
+    constructor(email: string, password: string, role?: UserRole, id?: number, apiKey?: string) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.id = id;
+        this.apiKey = apiKey;
     }
 }

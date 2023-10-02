@@ -8,6 +8,7 @@ export class User extends Model {
   public email!: string; 
   public password!: string; 
   public role!: UserRole;
+  public apiKey: string | undefined;
 }
 
 User.init(
@@ -31,6 +32,10 @@ User.init(
       values: Object.values(UserRole),
       allowNull: false,
       defaultValue: UserRole.USER
+    },
+    apiKey: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   },
   {

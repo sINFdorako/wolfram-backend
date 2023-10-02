@@ -6,6 +6,7 @@ import { Image } from './features/gallery_administration/data/data_sources/postg
 import authRoutes from './features/authentification/presentation/routes/auth_routes'
 import categoryRoutes from './features/gallery_administration/presentation/routes/category_routes';
 import imageRoutes from './features/gallery_administration/presentation/routes/image_routes';
+import publicRoutes from './features/gallery_administration/presentation/routes/public_routes';
 import { UserPostgresRepository } from './features/authentification/data/repositories/postgres/user_postgres_repository'
 import { UserDataSource } from './features/authentification/data/data_sources/postgres/user_data_source';
 import { configurePassport } from './features/authentification/config/passportConfig';
@@ -41,6 +42,7 @@ app.use('/auth', authRoutes);
 app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
 app.use('/uploads', express.static(UPLOADS_PATH));
+app.use('/public', publicRoutes);
 app.use(express.static(__dirname));
 
 // Synchronisieren der Modelle mit der Datenbank

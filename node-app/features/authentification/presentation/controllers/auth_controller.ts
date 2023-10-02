@@ -5,9 +5,12 @@ import { RegisterUser } from '../../domain/usecases/register_user';
 import { GetUserById } from '../../domain/usecases/get_user_by_id';
 import bcrypt from 'bcrypt';
 import { UpdateUser } from '../../domain/usecases/update_user';
+import { UpdateApiKey } from '../../domain/usecases/update_api_key';
+import crypto from 'crypto';
+import { HashApiKey } from '../../domain/usecases/hash_api_key';
 
 export class AuthController {
-    constructor(private loginUser: LoginUser, private registerUser: RegisterUser, private getUserById: GetUserById, private updateUser: UpdateUser) { }
+    constructor(private loginUser: LoginUser, private registerUser: RegisterUser, private getUserById: GetUserById, private updateUser: UpdateUser, private updateApiKey: UpdateApiKey) { }
 
     login = async (req: Request, res: Response) => {
         try {
@@ -113,6 +116,28 @@ export class AuthController {
         } catch (error) {
             console.error(error);
             res.status(500).send({ message: 'Failed to update user role', error });
+        }
+    }
+
+    handleApiKey = async (req: Request, res: Response) => {
+        try {
+            if (!req.user?.id) {
+                return res.status(400).send({ message: 'User ID is missing' });
+            }
+
+            const apiKey = crypto.randomBytes(32).toString('hex');
+            const hashKey: HashApiKey = new HashApiKey(apiKey);
+            const apiKeyHashed = hashKey.execute();
+            
+            const userId = req.user?.id;
+
+            await this.updateApiKey.execute(userId, apiKeyHashed);
+            
+            res.status(200).send({ apiKey, message: 'Success' });
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({message: 'Failed to update Api Key'});
         }
     }
     
