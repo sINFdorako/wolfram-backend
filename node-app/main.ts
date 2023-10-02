@@ -14,12 +14,15 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import { extractUser } from './core/middleware/extract_user';
+import cors from 'cors';
 dotenv.config();
 
 export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
 
 const app: express.Application = express();
 const port: number = 3000;
+
+app.use(cors());
 
 const userDataSource = new UserDataSource();
 const userRepository = new UserPostgresRepository(userDataSource);
