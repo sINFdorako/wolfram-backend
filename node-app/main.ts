@@ -23,9 +23,7 @@ export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
 const app: express.Application = express();
 const port: number = 3000;
 
-app.use(cors({
-    origin: ['https://651fddd2a8c8de0a64e3e19b--magnificent-raindrop-e4cece.netlify.app', 'https://backend.fotogalerie-wolfram-wildner.de', 'https://app.fotodesk-pro.de']
-}));
+app.use(cors());
 
 const userDataSource = new UserDataSource();
 const userRepository = new UserPostgresRepository(userDataSource);
