@@ -23,7 +23,9 @@ export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
 const app: express.Application = express();
 const port: number = 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: ['https://651fddd2a8c8de0a64e3e19b--magnificent-raindrop-e4cece.netlify.app', 'https://backend.fotogalerie-wolfram-wildner.de', 'https://app.fotodesk-pro.de']
+}));
 
 const userDataSource = new UserDataSource();
 const userRepository = new UserPostgresRepository(userDataSource);
@@ -36,7 +38,7 @@ app.use(bodyParser.json()); // Unterstützung für JSON-Request-Bodies
 app.use(bodyParser.urlencoded({ extended: true })); // Unterstützung für URL-codierte Request-Bodies
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, './features/authentification/presentation/views')); 
+app.set('views', path.join(__dirname, './features/authentification/presentation/views'));
 
 app.use('/auth', authRoutes);
 app.use('/category', extractUser, categoryRoutes);
