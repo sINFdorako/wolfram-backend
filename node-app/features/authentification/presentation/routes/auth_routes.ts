@@ -46,7 +46,7 @@ router.get('/register', (req: Request, res: Response) => {
 router.get('/user', ensureAuthenticated, authController.getUserByIdHandler);
 
 // Nur Superadmin kann den Benutzer aktualisieren
-router.put('/user/update-role', ensureAuthenticated, isSuperAdmin, authController.updateUserRole);
+router.put('/user/update-role/:id', ensureAuthenticated, isSelfOrSuperAdmin, authController.updateUserRole);
 
 router.post('/generate-api-key', ensureAuthenticated, authController.handleApiKey) 
 

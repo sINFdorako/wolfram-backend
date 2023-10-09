@@ -3,7 +3,8 @@ import session from 'express-session';
 import passport from 'passport';
 import { Category } from './features/gallery_administration/data/data_sources/postgres/models/category.model';
 import { Image } from './features/gallery_administration/data/data_sources/postgres/models/image.model';
-import authRoutes from './features/authentification/presentation/routes/auth_routes'
+import authRoutes from './features/authentification/presentation/routes/auth_routes';
+import settingRoutes from './features/authentification/presentation/routes/fotodesk_setting_routes';
 import categoryRoutes from './features/gallery_administration/presentation/routes/category_routes';
 import imageRoutes from './features/gallery_administration/presentation/routes/image_routes';
 import publicRoutes from './features/gallery_administration/presentation/routes/public_routes';
@@ -39,6 +40,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './features/authentification/presentation/views'));
 
 app.use('/auth', authRoutes);
+app.use('/fotodesk-setting', extractUser, settingRoutes)
 app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
 app.use('/uploads', express.static(UPLOADS_PATH));
@@ -46,7 +48,7 @@ app.use('/public', publicRoutes);
 app.use(express.static(__dirname));
 
 // Synchronisieren der Modelle mit der Datenbank
-sequelize.sync().then(() => {
+sequelize.sync({force: true}).then(() => {
     app.listen(port, () => {
         console.log(`Server running at http://localhost:${port}/`);
     });

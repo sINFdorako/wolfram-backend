@@ -44,6 +44,7 @@ export function isSuperAdmin(req: Request, res: Response, next: NextFunction) {
 }
 
 export function isSelfOrSuperAdmin(req: Request, res: Response, next: NextFunction) {
+    console.log(req.user!.id);
     if (req.user && (req.user.id === parseInt(req.params.id, 10) || req.user.role === 'superadmin')) {
         return next();
     }
