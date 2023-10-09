@@ -8,6 +8,7 @@ import { UpdateUser } from '../../domain/usecases/update_user';
 import { UpdateApiKey } from '../../domain/usecases/update_api_key';
 import crypto from 'crypto';
 import { HashApiKey } from '../../domain/usecases/hash_api_key';
+import { User } from '../../domain/entities/user';
 
 export class AuthController {
     constructor(private loginUser: LoginUser, private registerUser: RegisterUser, private getUserById: GetUserById, private updateUser: UpdateUser, private updateApiKey: UpdateApiKey) { }
@@ -42,17 +43,29 @@ export class AuthController {
 
     register = async (req: Request, res: Response) => {
         try {
-            const { email, password } = req.body;
+            const { email, password, company, position, lastLogin } = req.body; // Add new params here
     
-            // Validate input (basic example; consider using a library for robust validation)
+            // Validate input
             if (!email || !password) {
                 return res.status(400).json({ error: 'Email and password are required' });
             }
     
+            // Additional validation for new params (this is a basic example; adjust as needed)
+            if (company && typeof company !== 'string') {
+                return res.status(400).json({ error: 'Invalid company' });
+            }
+            if (position && typeof position !== 'string') {
+                return res.status(400).json({ error: 'Invalid position' });
+            }
+            // Add more validation as needed for registered, lastLogin, etc.
+    
             // Hash password
             const hashedPassword = await bcrypt.hash(password, 10);
+
+            const user = new User({email: email, password: hashedPassword, company: company, position: position, lastLogin: lastLogin});
     
-            const user = await this.registerUser.execute(email, hashedPassword);
+            // Adjust this to include new params
+            await this.registerUser.execute(user); 
     
             const secretKey = process.env.JWT_SECRET;
             if (!secretKey) {
@@ -70,6 +83,7 @@ export class AuthController {
             res.status(500).json({ error: 'An error occurred during registration' });
         }
     }
+    
 
     getUserByIdHandler = async (req: Request, res: Response) => {
         try {
