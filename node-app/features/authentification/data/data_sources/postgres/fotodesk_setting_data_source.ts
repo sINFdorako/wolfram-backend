@@ -10,7 +10,9 @@ export class FotodeskDataSource {
                 id: setting.id,
                 packages: setting.packages,
                 appSizeInGB: setting.appSizeInGB,
-                userId: setting.userId
+                userId: setting.userId,
+                trialInMonths: setting.trialInMonths,
+                pricePerMonth: setting.pricePerMonth
             }
         }
         return null;
@@ -20,18 +22,22 @@ export class FotodeskDataSource {
         const setting = await FotodeskSetting.create({
             packages: domainSetting.packages,
             appSizeInGB: domainSetting.appSizeInGB,
-            userId: domainSetting.userId
+            userId: domainSetting.userId,
+            trialInMonths: domainSetting.trialInMonths,
+            pricePerMonth: domainSetting.pricePerMonth,
         });
         return {
             id: setting.id,
             packages: setting.packages,
             appSizeInGB: setting.appSizeInGB,
-            userId: setting.userId
+            userId: setting.userId,
+            trialInMonths: setting.trialInMonths,
+            pricePerMonth: setting.pricePerMonth
         };
     }
 
     async updateSettingByUserIdInDB(userId: number, domainSetting: DomainFotodeskSetting): Promise<DomainFotodeskSetting> {
-        const settingToUpdate = await FotodeskSetting.findOne({ where: { userId, id: domainSetting.id } });
+        const settingToUpdate = await FotodeskSetting.findOne({ where: { userId } });
         if (!settingToUpdate) {
             throw new Error('Setting not found or not linked to the user');
         }
@@ -44,18 +50,28 @@ export class FotodeskDataSource {
             settingToUpdate.appSizeInGB = domainSetting.appSizeInGB;
         }
 
+        if(domainSetting.trialInMonths !== undefined) {
+            settingToUpdate.trialInMonths = domainSetting.trialInMonths;
+        }
+
+        if(domainSetting.pricePerMonth !== undefined) {
+            settingToUpdate.pricePerMonth = domainSetting.pricePerMonth;
+        }
+
         await settingToUpdate.save();
 
         return {
             id: settingToUpdate.id,
             packages: settingToUpdate.packages,
             appSizeInGB: settingToUpdate.appSizeInGB,
-            userId: settingToUpdate.userId
+            userId: settingToUpdate.userId,
+            trialInMonths: settingToUpdate.trialInMonths,
+            pricePerMonth: settingToUpdate.pricePerMonth
         };
     }
 
-    async deleteSettingByUserIdInDB(userId: number, id: number): Promise<void> {
-        const settingToDelete = await FotodeskSetting.findOne({ where: { userId, id } });
+    async deleteSettingByUserIdInDB(userId: number): Promise<void> {
+        const settingToDelete = await FotodeskSetting.findOne({ where: { userId } });
         if (!settingToDelete) {
             throw new Error('Setting not found or not linked to the user');
         }

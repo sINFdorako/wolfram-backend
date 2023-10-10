@@ -48,7 +48,7 @@ app.use('/public', publicRoutes);
 app.use(express.static(__dirname));
 
 // Synchronisieren der Modelle mit der Datenbank
-sequelize.sync({force: true}).then(() => {
+sequelize.sync().then(() => {
     app.listen(port, () => {
         console.log(`Server running at http://localhost:${port}/`);
     });

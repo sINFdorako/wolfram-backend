@@ -12,6 +12,8 @@ export class User {
     position?: string | null;
     registered?: Date | null;
     lastLogin?: Date | null;
+    prename?: string | null;
+    surname?: string | null;
 
     constructor({
         email,
@@ -22,7 +24,9 @@ export class User {
         company,
         position,
         registered,
-        lastLogin
+        lastLogin,
+        prename,
+        surname
     }: {
         email: string;
         password: string;
@@ -33,6 +37,8 @@ export class User {
         position?: string | null;
         registered?: Date | null;
         lastLogin?: Date | null;
+        prename?: string | null;
+        surname?: string | null;
     }) {
         this.email = email;
         this.password = password;
@@ -43,6 +49,8 @@ export class User {
         this.position = position;
         this.registered = registered;
         this.lastLogin = lastLogin;
+        this.prename = prename;
+        this.surname = surname;
     }
 }
 

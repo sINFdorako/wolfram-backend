@@ -13,8 +13,10 @@ export class UserDataSource {
                 role: user.role,
                 company: user.company ?? null,
                 position: user.position ?? null,
-                registered: user.registered ?? null,
-                lastLogin: user.lastLogin ?? null
+                registered: user.createdAt ?? null,
+                lastLogin: user.lastLogin ?? null,
+                prename: user.prename ?? null,
+                surname: user.surname ?? null
             };
         }
         return null;
@@ -29,27 +31,32 @@ export class UserDataSource {
             company: domainUser.company,
             position: domainUser.position,
             registered: domainUser.registered,
-            lastLogin: domainUser.lastLogin
+            lastLogin: domainUser.lastLogin,
+            prename: domainUser.prename ?? null,
+            surname: domainUser.surname ?? null
         };
-        
+
         const user = await User.create(newUser);
 
         return {
             id: user.id,
             email: user.email,
             password: user.password,
-            role: user.role as UserRole, 
+            role: user.role as UserRole,
             apiKey: user.apiKey,
             company: user.company,
             position: user.position,
-            registered: user.registered,
-            lastLogin: user.lastLogin
+            registered: user.createdAt,
+            lastLogin: user.lastLogin,
+            prename: user.prename,
+            surname: user.surname
+
         };
     }
 
     async getUserByIdFromDB(id: number): Promise<DomainUser | null> {
         const user = await User.findByPk(id);
-        if(user) {
+        if (user) {
             return {
                 id: user.id,
                 email: user.email,
@@ -57,8 +64,10 @@ export class UserDataSource {
                 role: user.role,
                 company: user.company ?? null,
                 position: user.position ?? null,
-                registered: user.registered ?? null,
-                lastLogin: user.lastLogin ?? null
+                registered: user.createdAt ?? null,
+                lastLogin: user.lastLogin ?? null,
+                prename: user.prename ?? null,
+                surname: user.surname ?? null
             };
         }
         return null;
@@ -75,10 +84,11 @@ export class UserDataSource {
         userToUpdate.role = domainUser.role ?? userToUpdate.role;
         userToUpdate.company = domainUser.company ?? userToUpdate.company;
         userToUpdate.position = domainUser.position ?? userToUpdate.position;
-        userToUpdate.registered = domainUser.registered ?? userToUpdate.registered;
         userToUpdate.lastLogin = domainUser.lastLogin ?? userToUpdate.lastLogin;
+        userToUpdate.prename = domainUser.prename ?? userToUpdate.prename;
+        userToUpdate.surname = domainUser.surname ?? userToUpdate.surname;
 
-        await userToUpdate.save(); // Save changes
+        await userToUpdate.save();
 
         return {
             id: userToUpdate.id,
@@ -87,8 +97,10 @@ export class UserDataSource {
             role: userToUpdate.role,
             company: userToUpdate.company,
             position: userToUpdate.position,
-            registered: userToUpdate.registered,
-            lastLogin: userToUpdate.lastLogin
+            registered: userToUpdate.createdAt,
+            lastLogin: userToUpdate.lastLogin,
+            prename: userToUpdate.prename,
+            surname: userToUpdate.surname
         };
     }
 
@@ -98,7 +110,7 @@ export class UserDataSource {
             throw new Error('User not found');
         }
 
-        if(apiKeyHashed) {
+        if (apiKeyHashed) {
             userToUpdate.apiKey = apiKeyHashed;
         }
 

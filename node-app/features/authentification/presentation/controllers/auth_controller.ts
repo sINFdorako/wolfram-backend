@@ -43,13 +43,13 @@ export class AuthController {
 
     register = async (req: Request, res: Response) => {
         try {
-            const { email, password, company, position, lastLogin } = req.body; // Add new params here
-    
+            const { email, password, company, position, lastLogin, prename, surname } = req.body; // Add new params here
+
             // Validate input
             if (!email || !password) {
                 return res.status(400).json({ error: 'Email and password are required' });
             }
-    
+
             // Additional validation for new params (this is a basic example; adjust as needed)
             if (company && typeof company !== 'string') {
                 return res.status(400).json({ error: 'Invalid company' });
@@ -58,32 +58,32 @@ export class AuthController {
                 return res.status(400).json({ error: 'Invalid position' });
             }
             // Add more validation as needed for registered, lastLogin, etc.
-    
+
             // Hash password
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            const user = new User({email: email, password: hashedPassword, company: company, position: position, lastLogin: lastLogin});
-    
+            const user = new User({ email: email, password: hashedPassword, company: company, position: position, lastLogin: lastLogin, prename: prename, surname: surname });
+
             // Adjust this to include new params
-            await this.registerUser.execute(user); 
-    
+            await this.registerUser.execute(user);
+
             const secretKey = process.env.JWT_SECRET;
             if (!secretKey) {
                 throw new Error('JWT_SECRET is not defined in the environment variables');
             }
-    
+
             const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, secretKey, {
                 expiresIn: '3h'
             });
-    
+
             res.json({ token });
-    
+
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'An error occurred during registration' });
         }
     }
-    
+
 
     getUserByIdHandler = async (req: Request, res: Response) => {
         try {
@@ -95,14 +95,14 @@ export class AuthController {
 
             const user = await this.getUserById.execute(userId);
 
-            if(!user) {
-                return res.status(404).send({message: 'No user found'})
+            if (!user) {
+                return res.status(404).send({ message: 'No user found' })
             }
 
             res.status(200).send(user);
         } catch (error) {
             console.error(error);
-            res.status(500).send({message: 'An error occured during find user by id', error: error})
+            res.status(500).send({ message: 'An error occured during find user by id', error: error })
         }
     }
 
@@ -111,9 +111,9 @@ export class AuthController {
             if (!req.user?.id) {
                 return res.status(400).send({ message: 'User ID is missing' });
             }
-            
+
             const userId = req.user?.id;
-            
+
             const { role } = req.body;
 
             const user = await this.getUserById.execute(userId);
@@ -122,9 +122,9 @@ export class AuthController {
                 return res.status(404).send({ message: 'User not found' });
             }
 
-            user.role = role; 
+            user.role = role;
 
-            await this.updateUser.execute(user); 
+            await this.updateUser.execute(user);
 
             res.status(200).send({ message: 'Role updated successfully', user });
         } catch (error) {
@@ -142,17 +142,17 @@ export class AuthController {
             const apiKey = crypto.randomBytes(32).toString('hex');
             const hashKey: HashApiKey = new HashApiKey(apiKey);
             const apiKeyHashed = hashKey.execute();
-            
+
             const userId = req.user?.id;
 
             await this.updateApiKey.execute(userId, apiKeyHashed);
-            
+
             res.status(200).send({ apiKey, message: 'Success' });
 
         } catch (error) {
             console.log(error);
-            res.status(500).send({message: 'Failed to update Api Key'});
+            res.status(500).send({ message: 'Failed to update Api Key' });
         }
     }
-    
+
 }
