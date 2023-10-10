@@ -6,6 +6,10 @@ export class FotodeskSetting extends Model {
     public packages!: String[];
     public appSizeInGB!: number;
     public userId!: number;
+    public trialInMonths!: number | null;
+    public pricePerMonth!: number | null;
+    public readonly updatedAt!: Date;
+    public readonly createdAt!: Date;
 }
 
 FotodeskSetting.init(
@@ -30,6 +34,14 @@ FotodeskSetting.init(
                 model: 'users',
                 key: 'id',
             }
+        },
+        trialInMonths: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: true
+        },
+        pricePerMonth: {
+            type: DataTypes.DOUBLE,
+            allowNull: true
         }
     },
     {

@@ -11,8 +11,11 @@ export class User extends Model {
   public apiKey: string | undefined;
   public company!: string | null;
   public position!: string | null;
-  public registered!: Date | null;
   public lastLogin!: Date | null;
+  public prename!: string | null;
+  public surname!: string | null;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 User.init(
@@ -42,20 +45,23 @@ User.init(
       allowNull: true
     },
     company: {
-      type: new DataTypes.STRING(255), // Adjust length as needed
+      type: new DataTypes.STRING(255),
       allowNull: true
     },
     position: {
-      type: new DataTypes.STRING(255), // Adjust length as needed
+      type: new DataTypes.STRING(255),
       allowNull: true
-    },
-    registered: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW 
     },
     lastLogin: {
       type: DataTypes.DATE,
+      allowNull: true
+    },
+    prename: {
+      type: new DataTypes.STRING(255),
+      allowNull: true
+    },
+    surname: {
+      type: new DataTypes.STRING(255),
       allowNull: true
     }
   },

@@ -19,7 +19,7 @@ export class UserPostgresRepository implements UserRepository {
         if (!userData) {
             return null;
         }
-        return new User({ email: userData.email, password: userData.password, company: userData.company, position: userData.position, registered: userData.registered, lastLogin: userData.lastLogin, role: userData.role, id: userData.id });
+        return new User({ email: userData.email, password: userData.password, company: userData.company, position: userData.position, registered: userData.registered, lastLogin: userData.lastLogin, role: userData.role, id: userData.id, prename: userData.prename, surname: userData.surname });
     }
 
     async getUserByEmail(email: string): Promise<User | null> {
@@ -27,11 +27,11 @@ export class UserPostgresRepository implements UserRepository {
         if (!userData) {
             return null;
         }
-        return new User({ email: userData.email, password: userData.password, role: userData.role, id: userData.id });
+        return new User({ email: userData.email, password: userData.password, company: userData.company, position: userData.position, registered: userData.registered, lastLogin: userData.lastLogin, role: userData.role, id: userData.id, prename: userData.prename, surname: userData.surname });
     }
 
     async createUser(user: User): Promise<User> {
-        const newUser = await this.dataSource.createUserOnDB(user);
-        return new User({ email: newUser.email, password: newUser.password, role: newUser.role, id: newUser.id });
+        const userData = await this.dataSource.createUserOnDB(user);
+        return new User({ email: userData.email, password: userData.password, company: userData.company, position: userData.position, registered: userData.registered, lastLogin: userData.lastLogin, role: userData.role, id: userData.id, prename: userData.prename, surname: userData.surname });
     }
 }

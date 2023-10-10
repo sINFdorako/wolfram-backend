@@ -14,20 +14,20 @@ export class FotodeskSettingRepositoryImpl implements FotodeskSettingRepository 
         if(!settingData) {
             return null;
         }
-        return new FotodeskSetting(settingData.packages, settingData.appSizeInGB, settingData.id, settingData.userId);
+        return new FotodeskSetting({packages: settingData.packages, appSizeInGB: settingData.appSizeInGB, id: settingData.id, userId: settingData.userId, trialInMonths: settingData.trialInMonths, pricePerMonth: settingData.pricePerMonth});
     }
 
     async createSetting(setting: FotodeskSetting): Promise<FotodeskSetting> {
-        const newSetting = await this.dataSource.createSettingOnDB(setting);
-        return new FotodeskSetting(newSetting.packages, newSetting.appSizeInGB, newSetting.id, newSetting.userId);
+        const settingData = await this.dataSource.createSettingOnDB(setting);
+        return new FotodeskSetting({packages: settingData.packages, appSizeInGB: settingData.appSizeInGB, id: settingData.id, userId: settingData.userId, trialInMonths: settingData.trialInMonths, pricePerMonth: settingData.pricePerMonth});
     }
 
     async updateSetting(userId: number, setting: FotodeskSetting): Promise<FotodeskSetting> {
-        const updatedSetting = await this.dataSource.updateSettingByUserIdInDB(userId, setting);
-        return new FotodeskSetting(updatedSetting.packages, updatedSetting.appSizeInGB, updatedSetting.id, updatedSetting.userId);
+        const settingData = await this.dataSource.updateSettingByUserIdInDB(userId, setting);
+        return new FotodeskSetting({packages: settingData.packages, appSizeInGB: settingData.appSizeInGB, id: settingData.id, userId: settingData.userId, trialInMonths: settingData.trialInMonths, pricePerMonth: settingData.pricePerMonth});
     }
 
-    async deleteSetting(userId: number, id: number): Promise<void> {
-        return await this.dataSource.deleteSettingByUserIdInDB(userId, id);
+    async deleteSetting(userId: number): Promise<void> {
+        return await this.dataSource.deleteSettingByUserIdInDB(userId);
     }
 }

@@ -15,13 +15,13 @@ export class FotoSettingsController {
 
     create = async (req: Request, res: Response) => {
         try {
-            const { packages, appSizeInGB } = req.body;
+            const { packages, appSizeInGB, trialInMonths, pricePerMonth } = req.body;
             if (!req.user?.id) {
                 return res.status(400).send({ message: 'User ID is missing' });
             }
             const userId = req.user.id;
 
-            const setting = new FotodeskSetting(packages, appSizeInGB, undefined, userId);
+            const setting = new FotodeskSetting({ packages: packages, appSizeInGB: appSizeInGB, userId: userId, trialInMonths: trialInMonths, pricePerMonth: pricePerMonth });
             const newSetting = await this.createSetting.execute(setting);
 
             res.status(201).json(newSetting);
@@ -57,9 +57,9 @@ export class FotoSettingsController {
                 return res.status(400).send({ message: 'User ID is missing' });
             }
             const userId = req.user?.id;
-            const { id, packages, appSizeInGB } = req.body;
+            const { packages, appSizeInGB, trialInMonths, pricePerMonth } = req.body;
 
-            const setting = new FotodeskSetting(packages, appSizeInGB, id, userId);
+            const setting = new FotodeskSetting({ packages: packages, appSizeInGB: appSizeInGB, userId: userId, trialInMonths: trialInMonths, pricePerMonth: pricePerMonth });
             const updatedSetting = await this.updateSetting.execute(userId, setting);
 
             res.status(200).json(updatedSetting);
@@ -75,9 +75,8 @@ export class FotoSettingsController {
                 return res.status(400).send({ message: 'User ID is missing' });
             }
             const userId = req.user?.id;
-            const settingId = Number(req.params.id);
 
-            await this.deleteSetting.execute(userId, settingId);
+            await this.deleteSetting.execute(userId);
 
             res.status(204).send(); // No Content
         } catch (error) {
