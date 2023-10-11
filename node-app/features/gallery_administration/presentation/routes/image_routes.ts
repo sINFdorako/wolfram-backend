@@ -31,7 +31,10 @@ const multerErrorHandler = (err: any, req: any, res: any, next: any) => {
 router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'), async (req, res) => {
     try {
         const files = req.files as Express.Multer.File[];
-        
+
+        console.log('aus flutter angekommen')
+        console.log(files)
+
         if (!files || files.length === 0) {
             res.status(400).send({ message: 'Bitte wählen Sie Dateien zum Hochladen aus.' });
             return;
@@ -49,7 +52,10 @@ router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'
         let imagesToUpload = [];
         let fileNamesProcessed = [];
 
+
         for (const file of files) {
+            console.log(file);
+
             console.log(file.originalname);
 
             const image = new Image(
@@ -93,6 +99,7 @@ router.post('/uploads/:categoryId', ensureAuthenticated, upload.array('images[]'
         res.send({ message: 'Dateien wurden erfolgreich hochgeladen', filenames: fileNamesProcessed });
 
     } catch (error) {
+        console.log(error);
         res.status(500).send({ message: 'Beim Hochladen der Dateien ist ein Fehler aufgetreten.', error });
     }
 });
@@ -125,7 +132,7 @@ router.get('/uploads', ensureAuthenticated, async (req, res) => {
         if (!req.user?.id) {
             return res.status(400).send({ message: 'User ID is missing' });
         }
-        const userId = req.user.id; 
+        const userId = req.user.id;
 
         const images = await getImagesByUser.execute(userId);
 
@@ -170,10 +177,10 @@ router.delete('/', ensureAuthenticated, async (req, res) => {
         await deleteImageIds.execute(userId, imageIds);
 
         // After the database operation, delete the actual image files.
-        for(const relativePath of pathsToDelete) {
+        for (const relativePath of pathsToDelete) {
             const fullPath = `/home${relativePath}`;
             fs.unlink(fullPath, (err) => {
-                if(err) {
+                if (err) {
                     console.error(`Failed to delete file ${fullPath}: ${err}`);
                 }
             });
