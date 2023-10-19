@@ -1,0 +1,19 @@
+{
+  "name": "native_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "load_image_animation.js",
+  "scripts": {
+    "start": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  },
+  "dependencies": {
+    "connect-history-api-fallback": "^2.0.0"
+  }
+}

@@ -1,9 +1,10 @@
 // data/data_sources/postgres/models/image.model.ts
 
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../../../../../../core/database_config/database';
+import { sequelize } from '../../../../core/database_config/database';
+import { ImageType } from '../../domain/entities/image';
 
-export class Image extends Model {
+export class ImageModel extends Model {
     public id!: number;
     public userId!: number;
     public categoryId!: number;
@@ -31,9 +32,13 @@ export class Image extends Model {
     public creator?: string;
     public copyright?: string;
     public creationDate?: Date;
+
+    //foreign key landingpage
+    public landingpageId?: number;
+    public imageType?: ImageType;
 }
 
-Image.init(
+ImageModel.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
@@ -128,6 +133,19 @@ Image.init(
         },
         creationDate: {
             type: DataTypes.DATE,
+            allowNull: true,
+        },
+        landingpageId: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: true, // An image may not always be associated with a landing page.
+            references: { // This is the association part
+                model: 'landingpages', // name of the target table
+                key: 'id', // key in the target model that the foreign key column is referencing
+            },
+        },
+        imageType: {
+            type: DataTypes.ENUM,
+            values: Object.values(ImageType),
             allowNull: true,
         },
     },

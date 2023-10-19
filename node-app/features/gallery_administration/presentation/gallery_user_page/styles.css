@@ -1,0 +1,618 @@
+/* Global styles */
+
+/* General body and text styles */
+body {
+    font-family: 'Garamond', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #ffffff;
+    background-color: #3F4A4B
+;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Garamond', sans-serif;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #ffffff
+
+;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: #ffffffa5
+
+;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #ffffffa5;
+    text-decoration: underline;
+}
+
+/* Navbar styles */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    color: #ffffff;
+    opacity: .7;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.navbar-brand:hover {
+    color: #ffffffa5;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.nav-link {
+    opacity: .9;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.nav-link:hover {
+    color: #ffffffa5
+
+;
+}
+
+/* Jumbotron styles */
+.jumbotron {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+    margin-bottom: 0;
+    background-image: url('hero.jpg');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+}
+
+.jumbotron h1 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.jumbotron p {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.jumbotron a.btn {
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.jumbotron a.btn:hover {
+    background-color: #ffffffa5
+
+;
+    color: #fff;
+}
+
+/* Gallery styles */
+#gallery {
+    background-color: #8B9BA5;
+}
+
+#gallery h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+#gallery .row>div {
+    margin-bottom: 2rem;
+}
+
+#gallery .img-fluid {
+    width: 100%;
+    min-height: 300px;
+    max-height: 300px;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* About styles */
+#about {
+    background-color: #8B9BA5;
+    font-family: 'Roboto', sans-serif;
+}
+
+#about h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #ffffff
+
+;
+    font-weight: 700;
+}
+
+#about .row>div {
+    margin-bottom: 2rem;
+}
+
+#about .img-fluid {
+    border-radius: 10px;
+    max-width: 200px;
+}
+
+#about .text-center {
+    padding: 3rem;
+    border-radius: 100px;
+}
+
+#about h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    margin-top: 2.5rem;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+#about p {
+    color: #ffffffa8;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* Contact styles */
+#contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+#contact form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#contact form label {
+    font-weight: 700;
+}
+
+#contact form input[type="text"],
+#contact form input[type="email"],
+#contact form textarea {
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+}
+
+#contact form textarea {
+    resize: none;
+}
+
+#contact form input[type="text"]:focus,
+#contact form input[type="email"]:focus,
+#contact form textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: #2C67A8
+
+;
+}
+
+#contact form button[type="submit"] {
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    background-color: #ffffff
+
+;
+    color: #fff;
+    border: none;
+}
+
+#contact form button[type="submit"]:hover {
+    color: #fff;
+}
+
+#contact ul li {
+    margin-bottom: 0.5rem;
+}
+
+#contact ul li a {
+    font-size: 1.25rem;
+    transition: color 0.2s ease-in-out;
+}
+
+#contact ul li a:hover {
+    color: #ffffffa5
+
+;
+}
+
+/* Footer styles */
+body,
+html {
+    height: 100%;
+}
+
+body.d-flex.flex-column.min-vh-100 {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main.flex-grow-1 {
+    flex: 1;
+}
+
+.mt-auto {
+    margin-top: auto;
+    /* pushes footer to the bottom */
+}
+
+footer {
+    color: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+footer p {
+    margin-bottom: 0;
+}
+
+footer ul li {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+footer ul li:last-child {
+    margin-right: 0;
+}
+
+footer ul li a {
+    color: #fff;
+}
+
+footer ul li a:hover {
+    color: #ffffffa5
+
+;
+}
+
+@media (max-width: 767px) {
+    .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .jumbotron h1 {
+        font-size: 2.5rem;
+    }
+
+    .jumbotron p {
+        font-size: 1.25rem;
+    }
+}
+
+/* Make the image smaller on small screens */
+@media (max-width: 768px) {
+    .rounded-circle {
+        max-width: 70%;
+        display: block;
+        margin: auto;
+    }
+}
+
+/* Add some padding on smaller screens */
+@media (max-width: 576px) {
+    .py-5 {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+}
+
+.image-container {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border: none;
+    /* Remove border */
+    outline: none;
+    /* Remove outline */
+}
+
+.loading-animation {
+    width: 100%;
+    min-height: 300px;
+    max-height: 300px;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, #97a0ab 0%, #eee 25%, #2C67A8
+
+ 50%, #eee 75%, #2C67A8
+
+ 100%);
+    background-size: 500% 100%;
+    animation: gradient 15s linear infinite;
+    border-radius: 10px;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0 0;
+    }
+
+    20% {
+        background-position: 100% 0;
+    }
+
+    40% {
+        background-position: 200% 0;
+    }
+
+    60% {
+        background-position: 300% 0;
+    }
+
+    80% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 500% 0;
+    }
+}
+
+
+.card {
+    background-color: #8B9BA5;
+    border: none;
+    /* Remove card border */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+    /* Add shadow */
+    transition: box-shadow 0.3s ease-in-out;
+    /* Add transition for hover effect */
+}
+
+.card:hover {
+    cursor: pointer;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+    /* Enlarge shadow on hover */
+}
+
+.card .card-body {
+    padding: 10px;
+    /* Add padding */
+}
+
+.card .my-card-title {
+    color: #ffffff;
+    font-weight: bold;
+    /* Make the title bold */
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.gallery-img {
+    border-radius: 0.3rem;
+    width: 100%;
+    min-height: 275px;
+    max-height: 275px;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    /* this ensures the aspect ratio of the image is maintained */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* calendar section */
+
+/* calendar section */
+
+#category-gallery {
+    padding: 40px 0;
+}
+
+.calendar-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;  /* Fill the height of its container */
+}
+
+#calendar-image {
+    border: 35px;
+    width: 100%;
+    height: auto;
+}
+
+.calendar-card-title {
+    font-size: 1.5em;
+    padding: 10px 15px;
+    color: #fff;
+    text-align: center;
+}
+
+.calendar-card-title a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.calendar-card-title a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.calendar-card-description {
+    padding: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #ffffffa5;
+}
+
+#calendar-button {
+    align-self: center;
+    text-align: center;  
+}
+
+/* custom button */
+
+.custom-btn {
+    background-color: transparent;  /* Ensure it's a transparent button */
+    color: #ffffff;                 /* Button text color */
+    border: 1px solid #ffffff;     /* Outline with desired color */
+    border-radius: 5px;            /* Rounded corners for the button */
+    transition: 0.3s;              /* Smooth transition for hover effects */
+}
+
+.custom-btn:hover, .custom-btn:focus {
+    background-color: #8B9BA5;    /* Change background to the color on hover/focus */
+    color: #ffffff;               /* Change text color to white on hover/focus */
+}
+
+.custom-btn-secondary {
+    background-color: transparent;  /* Ensure it's a transparent button */
+    color: #ffffff;                 /* Button text color */
+    border: 1px solid #ffffff;     /* Outline with desired color */
+    border-radius: 5px;            /* Rounded corners for the button */
+    transition: 0.3s;              /* Smooth transition for hover effects */
+}
+
+.custom-btn-secondary:hover, .custom-btn-secondary:focus {
+    background-color: #3f4a4b7a;    /* Change background to the color on hover/focus */
+    color: #ffffff;               /* Change text color to white on hover/focus */
+}
+
+.custom-btn:active {
+    background-color: #1b4c7d;    /* Slightly darker shade for active state */
+    color: #ffffff;
+}
+
+/* links section */
+.link-card {
+    border: .5px solid #ffffff;
+    background-color: transparent !important;
+}
+
+
+/* about me section */
+.about-me-section {
+    padding: 4rem 0;
+}
+
+.profile-section img {
+    border-radius: 35px;
+    max-width: 70%;
+}
+
+.timeline-section {
+    margin-top: 3rem;
+    position: relative;
+    font-family: Arial, sans-serif;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 2rem 0;
+    border-left: 4px solid #8B9BA5; /* Linienfarbe */
+    transition: all 0.3s ease; /* Glatter Übergang für Hover-Effekte */
+}
+
+.timeline-item:hover {
+    background-color: #8b9ba582; /* Hintergrundfarbe beim Überfahren */
+    border-left: 4px solid #8b9ba582; /* Linienfarbe beim Überfahren */
+}
+
+.timeline-item .timeline-date {
+    position: absolute;
+    left: -15%; 
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    border: .5px solid #8B9BA5;
+    background-color: transparent; /* Hintergrundfarbe des Datums */
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+}
+
+.timeline-item .timeline-content {
+    color: #ffffffa5;
+    padding-left: 2rem;
+    font-size: 1.1rem; /* Größere Schriftgröße für bessere Lesbarkeit */
+}
+
+.current-news-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 5px;
+}
+
+@media only screen and (max-width: 991px) {
+    .container {
+        padding: 0 30px; /* Erhöhter Innenabstand auf kleineren Bildschirmen */
+    }
+
+    .timeline-item .timeline-date {
+        left: -10%;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .timeline-item .timeline-date {
+        left: -20%;
+    }
+
+    .profile-section {
+        flex-direction: column-reverse; /* Vertauscht Bild und Text auf kleinen Bildschirmen */
+    }
+
+    .profile-section img, .profile-section p {
+        margin-bottom: 20px;
+    }
+}
+
+p {
+    color: #ffffffa5;
+}
+
+
+
+
+

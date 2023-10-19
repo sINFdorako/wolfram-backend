@@ -1,0 +1,24 @@
+## Setup of the project
+
+-   to delevop run "npm start"
+
+-   run "python generate_gallery_json.py", then every image is generated automatically in json 
+    including alt text and name as well as categories. 
+    
+    The script will only work with the following folder structure:
+        root /assets
+                /images
+                    /categorie_name_one
+                        /image_name_one
+                        /image_name_two
+                        /image_name_...
+                    /categorie_name_two
+                        /image_name_one
+                        /image_name_two
+                        /image_name_...
+                    /categorie_name_...
+                        /image_name_one
+                        /image_name_two
+                        /image_name_...
+
+    you will get a gallery.json which is handled by the application automatically

@@ -1,7 +1,7 @@
 // data/data_sources/postgres/models/category.model.ts
 
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../../../../../../core/database_config/database';
+import { sequelize } from '../../../../core/database_config/database';
 
 export class Category extends Model {
     public id!: number;

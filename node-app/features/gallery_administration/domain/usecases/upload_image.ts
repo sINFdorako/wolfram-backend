@@ -1,8 +1,8 @@
 import Image from '../entities/image';
-import { IImageRepository } from '../repositories/iimage_repository';
+import { ImageRepository } from '../repositories/image_repository';
 
 export class UploadImageUseCase {
-    constructor(private imageRepository: IImageRepository) {}
+    constructor(private imageRepository: ImageRepository) {}
 
     async execute(imagesData: Image[]): Promise<Image[]> {
 

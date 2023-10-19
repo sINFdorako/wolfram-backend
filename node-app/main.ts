@@ -1,8 +1,8 @@
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-import { Category } from './features/gallery_administration/data/data_sources/postgres/models/category.model';
-import { Image } from './features/gallery_administration/data/data_sources/postgres/models/image.model';
+import { Category } from './features/gallery_administration/data/models/category.model';
+import { Image } from './features/gallery_administration/data/models/image.model';
 import authRoutes from './features/authentification/presentation/routes/auth_routes';
 import settingRoutes from './features/authentification/presentation/routes/fotodesk_setting_routes';
 import categoryRoutes from './features/gallery_administration/presentation/routes/category_routes';
@@ -17,9 +17,12 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { extractUser } from './core/middleware/extract_user';
 import cors from 'cors';
+import fs from 'fs';
+import { Request, Response } from 'express';
 dotenv.config();
 
 export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
+export const LANDINGPAGE_PATH = path.join(__dirname, './features/gallery_administration/presentation/gallery_user_page/index.html');
 
 const app: express.Application = express();
 const port: number = 3000;
@@ -45,7 +48,22 @@ app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
 app.use('/uploads', express.static(UPLOADS_PATH));
 app.use('/public', publicRoutes);
-app.use(express.static(__dirname));
+app.use('/static', express.static(path.join(__dirname, './features/gallery_administration/presentation/gallery_user_page')));
+app.get('/landingpage/:userId', async (req: Request, res: Response) => {
+    try {
+        fs.readFile(path.join(__dirname, './features/gallery_administration/presentation/gallery_user_page/index.html'), 'utf8', (err, data) => {
+            if (err) {
+                return res.status(500).send('Interner Serverfehler');
+            }
+
+            res.send(data);
+        });
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'An error occurred when fetching landingpage.', error });
+    }
+});
 
 // Synchronisieren der Modelle mit der Datenbank
 sequelize.sync().then(() => {

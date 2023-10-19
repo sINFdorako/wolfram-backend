@@ -7,9 +7,9 @@ import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories
 import { Request, Response } from 'express';
 import { UpdateCategory } from '../../domain/usecases/update_category';
 import { DeleteCategories } from '../../domain/usecases/delete_categories';
-import { ImageRepository } from '../../data/repositories/image_repository';
+import { ImageRepository } from '../../data/repositories/image_repository_impl';
 import { DeleteImages } from '../../domain/usecases/delete_images';
-import { Image as ImageModel } from '../../data/data_sources/postgres/models/image.model';
+import { Image as ImageModel } from '../../data/models/image.model';
 import fs from 'fs';
 import { Op } from 'sequelize';
 

@@ -1,44 +1,113 @@
+export enum ImageType {
+    BACKGROUND_IMAGE = 'backgroundImage',
+    ME_IMAGE = 'meImage',
+    SPECIFIC_GALLERY_PREVIEW = 'specificGalleryPreview'
+}
 class Image {
-    id?: number;  // Eindeutige ID für das Bild
-    userId: number; // Fremdschlüssel für den Benutzer, der das Bild hochgeladen hat
-    categoryId: number; // Fremdschlüssel für die Kategorie, zu der dieses Bild gehört
-    url: string; // URL des hochgeladenen Bildes (z. B. Pfad in einem Cloud-Speicher)
-    filename: string; // Name der hochgeladenen Datei
-    originalFilename: string; // Orignaler Dateiname
-    fileSize: number; // Dateigröße in Bytes
-    mimeType: string; // MIME-Typ des Bildes, z.B. "image/jpeg"
-    
-    // Allgemeine Daten
-    title?: string; // Bildtitel
-    description?: string; // Beschreibung des Bildes
-    uploadDate: Date; // Hochladedatum des Bildes
-    lastModifiedDate?: Date; // Letztes Änderungsdatum des Bildes
-    tags?: string[]; // Tags oder Schlagworte zum Bild
+    id?: number;
+    userId: number;
+    categoryId: number;
+    url: string;
+    filename: string;
+    originalFilename: string;
+    fileSize: number;
+    mimeType: string;
+    title?: string;
+    description?: string;
+    uploadDate: Date;
+    lastModifiedDate?: Date;
+    tags?: string[];
+    cameraMake?: string;
+    cameraModel?: string;
+    exposureTime?: number;
+    aperture?: number;
+    iso?: number;
+    focalLength?: number;
+    flashUsed?: boolean;
+    creator?: string;
+    copyright?: string;
+    creationDate?: Date;
+    landingpageId?: number;
+    imageType?: ImageType;
 
-    // EXIF-Daten
-    cameraMake?: string; // Kamerahersteller
-    cameraModel?: string; // Kameramodell
-    exposureTime?: number; // Belichtungszeit
-    aperture?: number; // Blende
-    iso?: number; // ISO-Wert
-    focalLength?: number; // Brennweite
-    flashUsed?: boolean; // Blitz benutzt?
-
-    // IPTC-Daten
-    creator?: string; // Fotograf oder Künstler
-    copyright?: string; // Copyright-Informationen
-    creationDate?: Date; // Erstellungsdatum des Bildes
-
-    constructor( userId: number, categoryId: number, url: string, filename: string, originalFilename: string, fileSize: number, mimeType: string, uploadDate: Date, lastModifiedDate: Date) {
-        this.userId = userId;
-        this.categoryId = categoryId;
-        this.url = url;
-        this.filename = filename;
-        this.originalFilename = originalFilename;
-        this.fileSize = fileSize;
-        this.mimeType = mimeType;
-        this.uploadDate = uploadDate;
-        this.lastModifiedDate = lastModifiedDate;
+    constructor({
+        userId,
+        categoryId,
+        url,
+        filename,
+        originalFilename,
+        fileSize,
+        mimeType,
+        uploadDate,
+        lastModifiedDate,
+        landingpageId,
+        imageType,
+        title,
+        description,
+        tags,
+        cameraMake,
+        cameraModel,
+        exposureTime,
+        aperture,
+        iso,
+        focalLength,
+        flashUsed,
+        creator,
+        copyright,
+        creationDate,
+        id
+    }: {
+        userId?: number;
+        categoryId?: number;
+        url?: string;
+        filename?: string;
+        originalFilename?: string;
+        fileSize?: number;
+        mimeType?: string;
+        uploadDate?: Date;
+        lastModifiedDate?: Date;
+        landingpageId?: number;
+        imageType?: ImageType;
+        title?: string;
+        description?: string;
+        tags?: string[];
+        cameraMake?: string;
+        cameraModel?: string;
+        exposureTime?: number;
+        aperture?: number;
+        iso?: number;
+        focalLength?: number;
+        flashUsed?: boolean;
+        creator?: string;
+        copyright?: string;
+        creationDate?: Date;
+        id?: number;
+    }) {
+        this.userId = userId!;
+        this.categoryId = categoryId!;
+        this.url = url!;
+        this.filename = filename!;
+        this.originalFilename = originalFilename!;
+        this.fileSize = fileSize!;
+        this.mimeType = mimeType!;
+        this.uploadDate = uploadDate!;
+        this.lastModifiedDate = lastModifiedDate!;
+        this.landingpageId = landingpageId!;
+        this.imageType = imageType!;
+        this.title = title;
+        this.description = description;
+        this.tags = tags;
+        this.cameraMake = cameraMake;
+        this.cameraModel = cameraModel;
+        this.exposureTime = exposureTime;
+        this.aperture = aperture;
+        this.iso = iso;
+        this.focalLength = focalLength;
+        this.flashUsed = flashUsed;
+        this.creator = creator;
+        this.copyright = copyright;
+        this.creationDate = creationDate;
+        this.id = id;
     }
 }
 

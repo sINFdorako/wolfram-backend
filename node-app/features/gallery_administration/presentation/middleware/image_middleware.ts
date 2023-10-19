@@ -20,3 +20,10 @@ export const upload = multer({
     fileSize: uploadLimit
   }
 });
+
+export const multerErrorHandler = (err: any, req: any, res: any, next: any) => {
+  if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).send({ message: 'Die Dateigröße überschreitet das Limit.' });
+  }
+  next(err);
+};

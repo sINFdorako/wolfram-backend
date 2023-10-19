@@ -1,5 +1,5 @@
 import { ICategoryRepository } from '../../domain/repositories/icategory_repository';
-import { Category } from '../data_sources/postgres/models/category.model';
+import { Category } from '../models/category.model';
 import { Op } from 'sequelize';
 
 export class CategoryRepository implements ICategoryRepository {
