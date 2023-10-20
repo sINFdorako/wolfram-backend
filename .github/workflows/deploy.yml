@@ -23,6 +23,14 @@ jobs:
       NODE_ENV: ${{ secrets.NODE_ENV }}
       NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
       POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
+      POSTGRES_TEST_DB: ${{ secrets.POSTGRES_TEST_DB }}
+      PG_ADMIN_PORT: ${{ secrets.PG_ADMIN_PORT }}
+      NGINX_CONFIG_PATH: ${{ secrets.NGINX_CONFIG_PATH }}
+      API_KEY: ${{ secrets.API_KEY }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
+      PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+      PGADMIN_PORT: ${{ secrets.PGADMIN_PORT }}
       
     steps:
     - name: Checkout repository
