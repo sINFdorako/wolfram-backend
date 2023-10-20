@@ -15,7 +15,7 @@ describe('ImageDataSource', () => {
     });
 
     afterAll(async () => {
-        // Additional cleanup after all tests, like closing DB connections.
+        // Additional cleanup after all tests, like closing DB connections hihi.
         await ImageModel.destroy({ where: { id: 123 } });
     });
 
