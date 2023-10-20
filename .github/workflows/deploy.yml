@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - development
+      - develop
 
 jobs:
 
@@ -26,6 +26,11 @@ jobs:
         NODE_ENV: ${{ secrets.NODE_ENV }}
         NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
         POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
+
+    - name: Building fresh images
+      run: docker-compose -f ../../docker-compose.local.yml build nodejs postgres 
+    
+    - name: Starting docker compose
       run: docker-compose -f ../../docker-compose.local.yml up -d nodejs postgres 
 
     - name: Install dependencies inside the container
