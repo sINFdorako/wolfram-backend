@@ -40,4 +40,14 @@ describe('ImageDataSource', () => {
             expect(createdImage.url).toEqual(dummyImage.url);
         });
     });
+
+    describe('findImagesByUserIdAndCategory', () => {
+        it('should retrieve images based on user ID and category', async () => {
+            const images = await dataSource.findImagesByUserIdAndCategory(1, 1); // Assuming category 2 exists for userId 1
+            expect(images).toBeTruthy();
+            expect(images.length).toBeGreaterThan(0);
+            expect(images[0].userId).toEqual(1);
+            expect(images[0].categoryId).toEqual(1);
+        });
+    });
 });
