@@ -22,4 +22,5 @@ if (!POSTGRES_DB || !POSTGRES_USER || !POSTGRES_PASSWORD || !POSTGRES_HOST) {
       logging: false
     }
   );
+
   

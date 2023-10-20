@@ -7,14 +7,16 @@ import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories
 import { Request, Response } from 'express';
 import { UpdateCategory } from '../../domain/usecases/update_category';
 import { DeleteCategories } from '../../domain/usecases/delete_categories';
-import { ImageRepository } from '../../data/repositories/image_repository_impl';
 import { DeleteImages } from '../../domain/usecases/delete_images';
-import { Image as ImageModel } from '../../data/models/image.model';
 import fs from 'fs';
 import { Op } from 'sequelize';
+import { ImageModel } from '../../data/models/image.model';
+import { ImageRepositoryImpl } from '../../data/repositories/image_repository_impl';
+import { ImageDataSource } from '../../data/data_sources/image_data_source';
 
 const categoryRepository = new CategoryRepository();
-const imageRepository = new ImageRepository();
+const imageDataSource = new ImageDataSource();
+const imageRepository = new ImageRepositoryImpl(imageDataSource);
 const createCategoryUsecase = new CreateCategory(categoryRepository);
 const getCategoryById = new GetCategoryById(categoryRepository);
 const getAllCategoriesByUser = new GetAllCategoriesByUser(categoryRepository);

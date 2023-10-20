@@ -27,7 +27,7 @@ export class LandingpageDataSource {
     
         // If you want to return a more domain-friendly object, you might need to convert the model instance to a domain object.
         // For now, I'm just returning the model instance itself for simplicity.
-        return landingpageModel;
+        return {};
     }
     
 }

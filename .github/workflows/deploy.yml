@@ -4,9 +4,43 @@ on:
   push:
     branches:
       - main
+      - development
 
 jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Start Docker services
+      env: 
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        NODE_ENV: ${{ secrets.NODE_ENV }}
+        NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
+        POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
+      run: docker-compose -f ../../docker-compose.local.yml up -d nodejs postgres 
+
+    - name: Install dependencies inside the container
+      run: docker exec -it nodejs npm install 
+
+    - name: Run tests inside the container
+      run: docker exec -it nodejs npm test
+
+    - name: Cleanup Docker containers
+      if: always()
+      run: docker-compose -f ../../docker-compose.local.yml down
+
   deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: test
     runs-on: ubuntu-latest
 
     steps:

@@ -138,10 +138,10 @@ ImageModel.init(
         landingpageId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: true, // An image may not always be associated with a landing page.
-            references: { // This is the association part
-                model: 'landingpages', // name of the target table
-                key: 'id', // key in the target model that the foreign key column is referencing
-            },
+            // references: { // This is the association part
+            //     model: 'landingpages', // name of the target table
+            //     key: 'id', // key in the target model that the foreign key column is referencing
+            // },
         },
         imageType: {
             type: DataTypes.ENUM,

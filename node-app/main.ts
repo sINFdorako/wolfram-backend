@@ -1,13 +1,11 @@
 import express from 'express';
-import session from 'express-session';
 import passport from 'passport';
-import { Category } from './features/gallery_administration/data/models/category.model';
-import { Image } from './features/gallery_administration/data/models/image.model';
 import authRoutes from './features/authentification/presentation/routes/auth_routes';
 import settingRoutes from './features/authentification/presentation/routes/fotodesk_setting_routes';
 import categoryRoutes from './features/gallery_administration/presentation/routes/category_routes';
 import imageRoutes from './features/gallery_administration/presentation/routes/image_routes';
 import publicRoutes from './features/gallery_administration/presentation/routes/public_routes';
+import landingpageRoutes from './features/landingpage/presentation/routes/landingpage_routes';
 import { UserPostgresRepository } from './features/authentification/data/repositories/postgres/user_postgres_repository'
 import { UserDataSource } from './features/authentification/data/data_sources/postgres/user_data_source';
 import { configurePassport } from './features/authentification/config/passportConfig';
@@ -19,6 +17,9 @@ import { extractUser } from './core/middleware/extract_user';
 import cors from 'cors';
 import fs from 'fs';
 import { Request, Response } from 'express';
+import { Sequelize } from 'sequelize';
+import { seedTestUp } from './core/database_config/seeders/seed';
+import { setupAssociations } from './core/associations/associations';
 dotenv.config();
 
 export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
@@ -48,6 +49,7 @@ app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
 app.use('/uploads', express.static(UPLOADS_PATH));
 app.use('/public', publicRoutes);
+app.use('/landingpage', landingpageRoutes)
 app.use('/static', express.static(path.join(__dirname, './features/gallery_administration/presentation/gallery_user_page')));
 app.get('/landingpage/:userId', async (req: Request, res: Response) => {
     try {
@@ -65,11 +67,28 @@ app.get('/landingpage/:userId', async (req: Request, res: Response) => {
     }
 });
 
-// Synchronisieren der Modelle mit der Datenbank
-sequelize.sync().then(() => {
-    app.listen(port, () => {
-        console.log(`Server running at http://localhost:${port}/`);
-    });
-}).catch(err => {
-    console.error('Failed to synchronize database:', err);
-});
+if (process.env.NODE_ENV === 'test') {
+    sequelize.sync({ force: true })
+        .then(async () => {
+            console.log("Test database synced");
+            await seedTestUp(sequelize.getQueryInterface(), Sequelize);  // Seed the database
+            console.log("Test database seeded");
+
+            app.listen(port, () => {
+                console.log(`Server running at http://localhost:${port}/`);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to synchronize or seed test database:', err);
+        });
+} else {
+    sequelize.sync()
+        .then(() => {
+            app.listen(port, () => {
+                console.log(`Server running at http://localhost:${port}/`);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to synchronize database:', err);
+        });
+}
