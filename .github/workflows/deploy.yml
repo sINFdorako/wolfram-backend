@@ -18,7 +18,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Echo environment variables for debugging
+    - name: Echo environment variables for debugging this shit
       run: |
         echo POSTGRES_USER=$POSTGRES_USER
         echo POSTGRES_HOST=$POSTGRES_HOST
