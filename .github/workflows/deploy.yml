@@ -1,41 +1,51 @@
-name: Deploy to Server
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
       - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
-
+    env: 
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+      NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
+      POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
+      POSTGRES_TEST_DB: ${{ secrets.POSTGRES_TEST_DB }}
+      PG_ADMIN_PORT: ${{ secrets.PG_ADMIN_PORT }}
+      NGINX_CONFIG_PATH: ${{ secrets.NGINX_CONFIG_PATH }}
+      API_KEY: ${{ secrets.API_KEY }}
+      PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
+      PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+      PGADMIN_PORT: ${{ secrets.PGADMIN_PORT }}
+      
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Building fresh images
-      env: 
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        NODE_ENV: ${{ secrets.NODE_ENV }}
-        NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
-        POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
       run: docker-compose -f ./docker-compose.local.yml build nodejs postgres 
     
     - name: Starting docker compose
       run: docker-compose -f ./docker-compose.local.yml up -d nodejs postgres 
 
     - name: Install dependencies inside the container
-      run: docker exec -t nodejs npm install 
+      run: docker exec -t wolfram-backend_nodejs_1 npm install 
 
     - name: Run tests inside the container
-      run: docker exec -t nodejs npm test
+      run: docker exec -t wolfram-backend_nodejs_1 npm test
 
     - name: Cleanup Docker containers
       if: always()
