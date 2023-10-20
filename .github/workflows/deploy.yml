@@ -13,25 +13,25 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    env: 
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+      NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
+      POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
+      
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-      env: 
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        NODE_ENV: ${{ secrets.NODE_ENV }}
-        NODE_APP_PATH: ${{ secrets.NODE_APP_PATH }}
-        POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH }}
     - name: Echo environment variables for debugging this shit
-    run: |
-      echo POSTGRES_USER=$POSTGRES_USER
-      echo POSTGRES_HOST=$POSTGRES_HOST
+      run: |
+        echo POSTGRES_USER=$POSTGRES_USER
+        echo POSTGRES_HOST=$POSTGRES_HOST
 
     - name: Building fresh images
       run: docker-compose -f ./docker-compose.local.yml build nodejs postgres 
