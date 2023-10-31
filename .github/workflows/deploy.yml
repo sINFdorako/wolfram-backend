@@ -56,6 +56,11 @@ jobs:
     - name: Run tests inside the container
       run: docker exec -t wolfram-backend_nodejs_1 npm test
 
+    - name: Fetch Docker logs
+      run: |
+        docker logs wolfram-backend_nodejs_1
+        docker logs wolfram-backend_postgres_1
+
     - name: Cleanup Docker containers
       if: always()
       run: docker-compose -f ./docker-compose.local.yml down
