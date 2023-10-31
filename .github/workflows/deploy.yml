@@ -35,6 +35,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Stop all containers defined in docker-compose
+      run: docker-compose -f ./docker-compose.local.yml down 
+
+    - name: Removing all images related to services defined in docker-compose
+      run: docker-compose -f ./docker-compose.local.yml rm -f 
+
     - name: Building fresh images
       run: docker-compose -f ./docker-compose.local.yml build nodejs postgres 
     
