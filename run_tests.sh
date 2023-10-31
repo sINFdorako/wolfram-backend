@@ -15,8 +15,11 @@ docker-compose -f docker-compose.local.yml up -d nodejs postgres
 # Allow a moment for the services to initialize
 sleep 5
 
+docker exec -it backend-wolfram-nodejs-1 npx jest --clearCache
+
 # Install dependencies and run tests inside the nodejs container
 # docker exec -it backend-wolfram-nodejs-1 npm install
+
 docker exec -it backend-wolfram-nodejs-1 npm test
 
 # Cleanup: stop and remove the services

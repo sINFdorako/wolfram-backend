@@ -1,14 +1,12 @@
 import express from 'express';
-import { CategoryRepository } from '../../data/repositories/category_repository';
+import { CategoryRepositoryImpl } from '../../data/repositories/category_repository_impl';
 import { ensureApiKey } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories_by_user';
 import { Request, Response } from 'express';
 import { ImageRepositoryImpl } from '../../data/repositories/image_repository_impl';
 import { GetImagesByUserAndCategory } from '../../domain/usecases/get_images_by_user_and_category';
-import { ImageDataSource } from '../../data/data_sources/image_data_source';
 
-const categoryRepository = new CategoryRepository();
-const imageDataSource = new ImageDataSource();
+const categoryRepository = new CategoryRepositoryImpl();
 const imageRepository = new ImageRepositoryImpl();
 const getAllCategoriesByUser = new GetAllCategoriesByUser(categoryRepository);
 const getImagesByUserAndCategory = new GetImagesByUserAndCategory(imageRepository);

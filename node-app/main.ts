@@ -75,7 +75,7 @@ if (process.env.NODE_ENV === 'test') {
             console.log("Test database seeded");
 
             app.listen(port, () => {
-                console.log(`Server running at http://localhost:${port}/`);
+                console.log(`Server running on test database at http://localhost:${port}/`);
             });
         })
         .catch(err => {

@@ -7,47 +7,47 @@ describe('ImageDataSource', () => {
     const dataSource = new ImageDataSource();
 
     const dummyImage1: Image = new Image({
-        landingpageId: 1,
-        categoryId: 1,
+        landingpageId: 2,
+        categoryId: 3,
         userId: 1,
-        url: 'http://dummy.com/image1.jpg',
-        filename: 'dummy_image1.jpg',
-        originalFilename: 'dummy_original_image1.jpg',
-        fileSize: 1234,
-        mimeType: 'image/jpeg',
+        url: 'http://example.com/image1.jpg',
+        filename: 'example_image1.jpg',
+        originalFilename: 'example_original_image1.jpg',
+        fileSize: 4567,
+        mimeType: 'image/png',
         imageType: ImageType.ME_IMAGE
     });
     
     const dummyImage2: Image = new Image({
         landingpageId: 2,
-        categoryId: 1,
+        categoryId: 4,
         userId: 1,
-        url: 'http://dummy.com/image2.jpg',
-        filename: 'dummy_image2.jpg',
-        originalFilename: 'dummy_original_image2.jpg',
-        fileSize: 2345,
-        mimeType: 'image/jpeg',
+        url: 'http://example.com/image2.jpg',
+        filename: 'example_image2.jpg',
+        originalFilename: 'example_original_image2.jpg',
+        fileSize: 5678,
+        mimeType: 'image/gif',
         imageType: ImageType.SPECIFIC_GALLERY_PREVIEW
     });
     
     const dummyImage3: Image = new Image({
-        landingpageId: 1,
-        categoryId: 2,
+        landingpageId: 2,
+        categoryId: 5,
         userId: 1,
-        url: 'http://dummy.com/image3.jpg',
-        filename: 'dummy_image3.jpg',
-        originalFilename: 'dummy_original_image3.jpg',
-        fileSize: 3456,
-        mimeType: 'image/png',
-        imageType: ImageType.BACKGROUND_IMAGE
+        url: 'http://example.com/image3.jpg',
+        filename: 'example_image3.jpg',
+        originalFilename: 'example_original_image3.jpg',
+        fileSize: 6789,
+        mimeType: 'image/svg+xml',
+        imageType: ImageType.SPECIFIC_GALLERY_PREVIEW
     });
     
     const updateDummy: Image = new Image({
-        userId: 1,
-        url: 'http://dummy.com/image_update.jpg',
-        filename: 'dummy_image_update.jpg',
-        originalFilename: 'dummy_original_image_update.jpg',
-        fileSize: 3345,
+        userId: 3,
+        url: 'http://example.com/image_update.jpg',
+        filename: 'example_image_update.jpg',
+        originalFilename: 'example_original_image_update.jpg',
+        fileSize: 7890,
         mimeType: 'image/jpeg',
         imageType: ImageType.BACKGROUND_IMAGE
     });
@@ -104,7 +104,7 @@ describe('ImageDataSource', () => {
             
             const updatedImage = await dataSource.updateImage(dummyImageUpdate, 1, 1); // Assuming 1 is an existing image ID
             expect(updatedImage).toBeTruthy();
-            expect(updatedImage?.fileSize).toEqual(3345)
+            expect(updatedImage?.fileSize).toEqual(7890)
         });
     });
 

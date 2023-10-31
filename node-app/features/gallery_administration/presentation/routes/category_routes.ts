@@ -1,6 +1,6 @@
 import express from 'express';
 import { CreateCategory } from '../../domain/usecases/create_category';
-import { CategoryRepository } from '../../data/repositories/category_repository';
+import { CategoryRepositoryImpl } from '../../data/repositories/category_repository_impl';
 import { ensureApiKey, ensureAuthenticated } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetCategoryById } from '../../domain/usecases/get_category_by_id';
 import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories_by_user';
@@ -12,10 +12,8 @@ import fs from 'fs';
 import { Op } from 'sequelize';
 import { ImageModel } from '../../data/models/image.model';
 import { ImageRepositoryImpl } from '../../data/repositories/image_repository_impl';
-import { ImageDataSource } from '../../data/data_sources/image_data_source';
 
-const categoryRepository = new CategoryRepository();
-const imageDataSource = new ImageDataSource();
+const categoryRepository = new CategoryRepositoryImpl();
 const imageRepository = new ImageRepositoryImpl();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
 const getCategoryById = new GetCategoryById(categoryRepository);
