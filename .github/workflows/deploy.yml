@@ -44,6 +44,9 @@ jobs:
     - name: Install dependencies inside the container
       run: docker exec -t wolfram-backend_nodejs_1 npm install 
 
+    - name: Clean jest cache
+      run: docker exec -t wolfram-backend_nodejs_1 npx jest --clearCache 
+
     - name: Run tests inside the container
       run: docker exec -t wolfram-backend_nodejs_1 npm test
 
