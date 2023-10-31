@@ -45,7 +45,7 @@ jobs:
       run: docker-compose -f ./docker-compose.local.yml build nodejs postgres 
     
     - name: Starting docker compose
-      run: docker-compose -f ./docker-compose.local.yml up nodejs postgres 
+      run: docker-compose -f ./docker-compose.local.yml up -d nodejs postgres 
 
     - name: Install dependencies inside the container
       run: docker exec -t wolfram-backend_nodejs_1 npm install 
