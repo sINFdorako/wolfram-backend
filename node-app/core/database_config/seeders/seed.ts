@@ -4,11 +4,13 @@ export async function seedTestUp(queryInterface: any, Sequelize: any) {
   const users = await queryInterface.bulkInsert('users', [{
     email: 'demo@user.com',
     password: 'demoPassword',  // NOTE: Always hash passwords before seeding. This is a placeholder.
-    role: 'USER',  // assuming 'USER' is one of the values in UserRole
+    role: 'user',  // assuming 'USER' is one of the values in UserRole
     company: 'Demo Company',
     position: 'Developer',
     prename: 'Demo',
     surname: 'User',
+    createdAt: new Date(),
+    updatedAt: new Date()
   }], { returning: true });
 
   const demoUserId = users[0].id;
@@ -16,11 +18,15 @@ export async function seedTestUp(queryInterface: any, Sequelize: any) {
   // 2. Seed the categories table
   const categories = await queryInterface.bulkInsert('categories', [
     {
+      creationDate: new Date(),
+      lastModifiedDate: new Date(),
       userId: demoUserId,
       name: 'Category 1',
       description: 'This is category 1'
     },
     {
+      creationDate: new Date(),
+      lastModifiedDate: new Date(),
       userId: demoUserId,
       name: 'Category 2',
       description: 'This is category 2'
@@ -30,6 +36,8 @@ export async function seedTestUp(queryInterface: any, Sequelize: any) {
   // 3. Seed the images table
   await queryInterface.bulkInsert('images', [
     {
+      uploadDate: new Date(),
+      lastModifiedDate: new Date(),
       userId: demoUserId,
       categoryId: categories[0].id,
       url: 'http://example.com/image1.jpg',
@@ -39,6 +47,8 @@ export async function seedTestUp(queryInterface: any, Sequelize: any) {
       mimeType: 'image/jpeg'
     },
     {
+      uploadDate: new Date(),
+      lastModifiedDate: new Date(),
       userId: demoUserId,
       categoryId: categories[1].id,
       url: 'http://example.com/image2.jpg',
@@ -51,6 +61,8 @@ export async function seedTestUp(queryInterface: any, Sequelize: any) {
 
   // 4. Seed the fotodesk_settings table
   await queryInterface.bulkInsert('fotodesk_settings', [{
+    updatedAt: new Date(),
+    createdAt: new Date(),
     packages: ['package1', 'package2'],
     appSizeInGB: 5,
     userId: demoUserId,

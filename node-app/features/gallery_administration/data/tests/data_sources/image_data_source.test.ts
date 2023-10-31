@@ -7,9 +7,9 @@ describe('ImageDataSource', () => {
     const dataSource = new ImageDataSource();
 
     const dummyImage1: Image = new Image({
-        landingpageId: 3,
+        landingpageId: 2,
         categoryId: 3,
-        userId: 2,
+        userId: 1,
         url: 'http://example.com/image1.jpg',
         filename: 'example_image1.jpg',
         originalFilename: 'example_original_image1.jpg',
@@ -19,9 +19,9 @@ describe('ImageDataSource', () => {
     });
     
     const dummyImage2: Image = new Image({
-        landingpageId: 4,
+        landingpageId: 2,
         categoryId: 4,
-        userId: 3,
+        userId: 1,
         url: 'http://example.com/image2.jpg',
         filename: 'example_image2.jpg',
         originalFilename: 'example_original_image2.jpg',
@@ -31,15 +31,15 @@ describe('ImageDataSource', () => {
     });
     
     const dummyImage3: Image = new Image({
-        landingpageId: 3,
+        landingpageId: 2,
         categoryId: 5,
-        userId: 2,
+        userId: 1,
         url: 'http://example.com/image3.jpg',
         filename: 'example_image3.jpg',
         originalFilename: 'example_original_image3.jpg',
         fileSize: 6789,
         mimeType: 'image/svg+xml',
-        imageType: ImageType.BACKGROUND_IMAGE
+        imageType: ImageType.SPECIFIC_GALLERY_PREVIEW
     });
     
     const updateDummy: Image = new Image({
