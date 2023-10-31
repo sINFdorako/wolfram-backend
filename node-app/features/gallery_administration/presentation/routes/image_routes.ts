@@ -4,7 +4,6 @@ import { ensureAuthenticated } from '../../../authentification/presentation/midd
 import { GetImagesByUser } from '../../domain/usecases/get_images_by_user';
 import { GetImagesByUserAndCategory } from '../../domain/usecases/get_images_by_user_and_category';
 import { DeleteImages } from '../../domain/usecases/delete_images';
-import { ImageDataSource } from '../../data/data_sources/image_data_source';
 import { ImageRepository } from '../../domain/repositories/image_repository';
 import { ImageRepositoryImpl } from '../../data/repositories/image_repository_impl';
 import { UploadImageUseCase } from '../../domain/usecases/upload_image';
@@ -15,8 +14,6 @@ import { UpdateSingleImage } from '../../domain/usecases/update_single_image';
 import { CreateSingleImage } from '../../domain/usecases/create_single_image';
 import { GetImagesByLandingPageAndType } from '../../domain/usecases/get_images_by_landingapge_and_type';
 
-
-const dataSource = new ImageDataSource();
 const imageRepository: ImageRepository = new ImageRepositoryImpl();
 
 const metaDataSource = new ImageMetaDataImpl()

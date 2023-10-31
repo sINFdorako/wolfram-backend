@@ -1,5 +1,5 @@
 import express from 'express';
-import { CategoryRepository } from '../../data/repositories/category_repository';
+import { CategoryRepository } from '../../data/repositories/category_repository_impl';
 import { ensureApiKey } from '../../../authentification/presentation/middlewares/auth_middleware';
 import { GetAllCategoriesByUser } from '../../domain/usecases/get_all_categories_by_user';
 import { Request, Response } from 'express';

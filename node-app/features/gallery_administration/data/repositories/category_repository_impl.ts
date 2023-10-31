@@ -1,8 +1,8 @@
-import { ICategoryRepository } from '../../domain/repositories/icategory_repository';
+import { CategoryRepository } from '../../domain/repositories/category_repository';
 import { Category } from '../models/category.model';
 import { Op } from 'sequelize';
 
-export class CategoryRepository implements ICategoryRepository {
+export class CategoryRepositoryImpl implements CategoryRepository {
   async updateCategory(userId: number, name: string, categoryId: number,  description?: string | undefined): Promise<Category> {
     const category = await Category.findOne({
         where: {
