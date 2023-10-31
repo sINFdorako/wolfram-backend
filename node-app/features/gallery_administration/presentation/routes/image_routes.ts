@@ -17,7 +17,7 @@ import { GetImagesByLandingPageAndType } from '../../domain/usecases/get_images_
 
 
 const dataSource = new ImageDataSource();
-const imageRepository: ImageRepository = new ImageRepositoryImpl(dataSource);
+const imageRepository: ImageRepository = new ImageRepositoryImpl();
 
 const metaDataSource = new ImageMetaDataImpl()
 
