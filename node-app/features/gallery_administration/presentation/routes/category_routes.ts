@@ -16,7 +16,7 @@ import { ImageDataSource } from '../../data/data_sources/image_data_source';
 
 const categoryRepository = new CategoryRepository();
 const imageDataSource = new ImageDataSource();
-const imageRepository = new ImageRepositoryImpl(imageDataSource);
+const imageRepository = new ImageRepositoryImpl();
 const createCategoryUsecase = new CreateCategory(categoryRepository);
 const getCategoryById = new GetCategoryById(categoryRepository);
 const getAllCategoriesByUser = new GetAllCategoriesByUser(categoryRepository);

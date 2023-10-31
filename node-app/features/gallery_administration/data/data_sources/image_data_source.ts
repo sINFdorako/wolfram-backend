@@ -1,6 +1,7 @@
 import { ImageType } from '../../domain/entities/image';
+import { transformImageModelToPlainObject } from '../mappers/image_mapper';
 import { ImageModel } from '../models/image.model';
-import { Op } from 'sequelize';
+import { Op, Optional } from 'sequelize';
 
 export class ImageDataSource {
     async deleteImagesByUserIdAndIds(userId: number, imageIds: number[]): Promise<void> {
@@ -23,15 +24,18 @@ export class ImageDataSource {
     }
 
     async bulkCreateImages(imagesModelArray: ImageModel[]): Promise<ImageModel[]> {
-        return await ImageModel.bulkCreate(imagesModelArray as any[]);
+        const plainImages = imagesModelArray.map(transformImageModelToPlainObject);
+        return await ImageModel.bulkCreate(plainImages);
     }
-
+    
     async createImage(imageModel: ImageModel): Promise<ImageModel> {
-        return await ImageModel.create(imageModel as any);
+        const plainImage = transformImageModelToPlainObject(imageModel);
+        return await ImageModel.create(plainImage);
     }
+    
 
-    async updateImage(imageModel: ImageModel, id: number): Promise<ImageModel | null> {
-        await ImageModel.update(imageModel, { where: { id } });
+    async updateImage(imageModel: ImageModel, id: number, userId: number): Promise<ImageModel | null> {
+        await ImageModel.update(imageModel, { where: { userId, id } });
         return await ImageModel.findByPk(id);
     }
 

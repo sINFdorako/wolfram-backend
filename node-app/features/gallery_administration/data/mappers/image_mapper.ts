@@ -70,3 +70,39 @@ export function imageEntityToModel(image: Image): any {
         imageType: image.imageType
     };
 }
+
+export const transformImageModelToPlainObject = (image: ImageModel) => {
+    return {
+        id: image.id,
+        userId: image.userId,
+        categoryId: image.categoryId,
+        url: image.url,
+        filename: image.filename,
+        originalFilename: image.originalFilename,
+        fileSize: image.fileSize,
+        mimeType: image.mimeType,
+        title: image.title,
+        description: image.description,
+        uploadDate: image.uploadDate,
+        lastModifiedDate: image.lastModifiedDate,
+        tags: image.tags,
+
+        // EXIF-Daten
+        cameraMake: image.cameraMake,
+        cameraModel: image.cameraModel,
+        exposureTime: image.exposureTime,
+        aperture: image.aperture,
+        iso: image.iso,
+        focalLength: image.focalLength,
+        flashUsed: image.flashUsed,
+
+        // IPTC-Daten
+        creator: image.creator,
+        copyright: image.copyright,
+        creationDate: image.creationDate,
+
+        // foreign key landingpage
+        landingpageId: image.landingpageId,
+        imageType: image.imageType
+    };
+};
