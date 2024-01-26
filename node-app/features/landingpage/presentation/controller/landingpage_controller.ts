@@ -17,7 +17,7 @@ export class LandingpageController {
         try {
             const {
                 domainName, navTitle, primaryColor, secondaryColor, googleAnalyticsTag, userId, id, apiKey, heroTitle, heroSubTitle,
-                ctaText, backgroundImage, specificGalleryPreview, meImage, meName, meSurname, meMainText, meNewsText, contactEmail, contactPhone
+                ctaText, meName, meSurname, meMainText, meNewsText, contactEmail, contactPhone
             } = req.body;
 
             const landingpage = new Landingpage({
@@ -32,9 +32,6 @@ export class LandingpageController {
                 heroTitle: heroTitle,
                 heroSubTitle: heroSubTitle,
                 ctaText: ctaText,
-                backgroundImage: backgroundImage,
-                specificGalleryPreview: specificGalleryPreview,
-                meImage: meImage,
                 meName: meName,
                 meSurname: meSurname,
                 meMainText: meMainText,
@@ -57,7 +54,7 @@ export class LandingpageController {
         try {
             const {
                 domainName, navTitle, primaryColor, secondaryColor, googleAnalyticsTag, userId, id, apiKey, heroTitle, heroSubTitle,
-                ctaText, backgroundImage, specificGalleryPreview, meImage, meName, meSurname, meMainText, meNewsText, contactEmail, contactPhone
+                ctaText, meName, meSurname, meMainText, meNewsText, contactEmail, contactPhone
             } = req.body;
 
             const landingpage = new Landingpage({
@@ -72,9 +69,6 @@ export class LandingpageController {
                 heroTitle: heroTitle,
                 heroSubTitle: heroSubTitle,
                 ctaText: ctaText,
-                backgroundImage: backgroundImage,
-                specificGalleryPreview: specificGalleryPreview,
-                meImage: meImage,
                 meName: meName,
                 meSurname: meSurname,
                 meMainText: meMainText,
@@ -83,7 +77,7 @@ export class LandingpageController {
                 contactPhone: contactPhone
             });
 
-            const result = await this.updateLandingpage.execute(landingpage);
+            const result = await this.updateLandingpage.execute(landingpage, );
 
             res.status(200).send(result);
 

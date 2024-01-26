@@ -1,5 +1,3 @@
-import Image from "../../../gallery_administration/domain/entities/image";
-
 export class Landingpage {
     // custom domain
     domainName?: string;
@@ -17,13 +15,8 @@ export class Landingpage {
     heroTitle?: string;
     heroSubTitle?: string;
     ctaText?: string;
-    backgroundImage?: Image[];
-
-    // galerie vorschau
-    specificGalleryPreview?: Image[];
 
     // über mich
-    meImage?: Image;
     meName?: string;
     meSurname?: string;
     meMainText?: string;
@@ -45,9 +38,6 @@ export class Landingpage {
         heroTitle,
         heroSubTitle,
         ctaText,
-        backgroundImage,
-        specificGalleryPreview,
-        meImage,
         meName,
         meSurname,
         meMainText,
@@ -66,9 +56,6 @@ export class Landingpage {
         heroTitle?: string;
         heroSubTitle?: string;
         ctaText?: string;
-        backgroundImage?: Image[];
-        specificGalleryPreview?: Image[];
-        meImage?: Image;
         meName?: string;
         meSurname?: string;
         meMainText?: string;
@@ -87,9 +74,6 @@ export class Landingpage {
         this.heroTitle = heroTitle;
         this.heroSubTitle = heroSubTitle;
         this.ctaText = ctaText;
-        this.backgroundImage = backgroundImage;
-        this.specificGalleryPreview = specificGalleryPreview;
-        this.meImage = meImage;
         this.meName = meName;
         this.meSurname = meSurname;
         this.meMainText = meMainText;

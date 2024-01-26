@@ -1,33 +1,42 @@
-import { Landingpage } from "../../domain/entities/landingpage";
+import { transformLandingPageModelToPlainObject } from "../mappers/landingpage_mapper";
 import { LandingpageModel } from "../models/landingpage.model";
 
 export class LandingpageDataSource {
-    async createLandingPage(landingpage: Landingpage): Promise<Landingpage | null> {
-        const landingpageModel = await LandingpageModel.create({
-            domainName: landingpage.domainName,
-            navTitle: landingpage.navTitle,
-            primaryColor: landingpage.primaryColor,
-            secondaryColor: landingpage.secondaryColor,
-            googleAnalyticsTag: landingpage.googleAnalyticsTag,
-            userId: landingpage.userId,
-            apiKey: landingpage.apiKey,
-            heroTitle: landingpage.heroTitle,
-            heroSubTitle: landingpage.heroSubTitle,
-            ctaText: landingpage.ctaText,
-            backgroundImage: JSON.stringify(landingpage.backgroundImage), // assuming JSON storage for images
-            specificGalleryPreview: JSON.stringify(landingpage.specificGalleryPreview), // same here
-            meImage: JSON.stringify(landingpage.meImage), // and here
-            meName: landingpage.meName,
-            meSurname: landingpage.meSurname,
-            meMainText: landingpage.meMainText,
-            meNewsText: landingpage.meNewsText,
-            contactEmail: landingpage.contactEmail,
-            contactPhone: landingpage.contactPhone,
-        });
-    
-        // If you want to return a more domain-friendly object, you might need to convert the model instance to a domain object.
-        // For now, I'm just returning the model instance itself for simplicity.
-        return {};
+    async createLandingPage(landingpageModel: LandingpageModel): Promise<LandingpageModel> {
+        try {
+            const plainLandingpage = transformLandingPageModelToPlainObject(landingpageModel);
+            return await LandingpageModel.create(plainLandingpage)
+        } catch (error) {
+            console.error('Error creating landingpage', error);
+            throw error;
+        }
     }
-    
+
+    async updateLandingPage(landingpageModel: LandingpageModel, userId: number): Promise<LandingpageModel> {
+        try {
+             await LandingpageModel.update(landingpageModel, { where: {userId}})
+             return await LandingpageModel.findOne(userId);
+        } catch (error) {
+            console.error("Error updating landingpage:", error);
+            throw error;
+        }
+    }
+
+    async getLandingPageByUser(userId: number): Promise<LandingpageModel> {
+        try {
+            return await LandingpageModel.findOne({where: {userId}});
+        } catch (error) {
+            console.error("Error getting landingpage:", error);
+            throw error;
+        }
+    }
+
+    async deleteLandingPageByUser(userId: number): Promise<void> {
+        try {
+            await LandingpageModel.destroy({where: {userId}});
+        } catch (error) {
+            console.error("Error deleting landingpage:", error);
+            throw error;
+        }
+    }
 }

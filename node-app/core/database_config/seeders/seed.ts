@@ -69,9 +69,31 @@ export async function seedTestUp(queryInterface: any, Sequelize: any) {
     trialInMonths: 1,
     pricePerMonth: 9.99
   }]);
+
+  // 5. Seed landingpages table
+  await queryInterface.bulkInsert('landingpages', [{
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    domainName: "example.com",
+    navTitle: "Example",
+    primaryColor: "#ffffff",
+    secondaryColor: "#000000",
+    googleAnalyticsTag: "GA-1234567",
+    userId: 1,
+    heroTitle: "Welcome!",
+    heroSubTitle: "Sub welcome",
+    ctaText: "Click me",
+    meName: "John",
+    meSurname: "Doe",
+    meMainText: "Main text",
+    meNewsText: "News text",
+    contactEmail: "example@example.com",
+    contactPhone: "1234567890",
+  }])
 }
 
 export async function seedTestDown(queryInterface: any, Sequelize: any) {
+  await queryInterface.bulkDelete('landingpages', null, {});
   await queryInterface.bulkDelete('fotodesk_settings', null, {});
   await queryInterface.bulkDelete('images', null, {});
   await queryInterface.bulkDelete('categories', null, {});

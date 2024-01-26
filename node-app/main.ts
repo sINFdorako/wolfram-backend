@@ -6,6 +6,7 @@ import categoryRoutes from './features/gallery_administration/presentation/route
 import imageRoutes from './features/gallery_administration/presentation/routes/image_routes';
 import publicRoutes from './features/gallery_administration/presentation/routes/public_routes';
 import landingpageRoutes from './features/landingpage/presentation/routes/landingpage_routes';
+import customerCRMRoutes from './features/crm/presentation/routes/customer_crm_routes';
 import { UserPostgresRepository } from './features/authentification/data/repositories/postgres/user_postgres_repository'
 import { UserDataSource } from './features/authentification/data/data_sources/postgres/user_data_source';
 import { configurePassport } from './features/authentification/config/passportConfig';
@@ -19,7 +20,6 @@ import fs from 'fs';
 import { Request, Response } from 'express';
 import { Sequelize } from 'sequelize';
 import { seedTestUp } from './core/database_config/seeders/seed';
-import { setupAssociations } from './core/associations/associations';
 dotenv.config();
 
 export const UPLOADS_PATH = path.resolve(__dirname, '..', '/home/uploads');
@@ -49,7 +49,8 @@ app.use('/category', extractUser, categoryRoutes);
 app.use('/image', extractUser, imageRoutes);
 app.use('/uploads', express.static(UPLOADS_PATH));
 app.use('/public', publicRoutes);
-app.use('/landingpage', landingpageRoutes)
+app.use('/landingpage', landingpageRoutes);
+app.use('/customer-crm', customerCRMRoutes);
 app.use('/static', express.static(path.join(__dirname, './features/gallery_administration/presentation/gallery_user_page')));
 app.get('/landingpage/:userId', async (req: Request, res: Response) => {
     try {
