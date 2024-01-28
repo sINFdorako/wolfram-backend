@@ -10,7 +10,7 @@ export class LandingpageRepositoryImpl implements LandingpageRepository {
     this.dataSource = new LandingpageDataSource();
   }
 
-  async createLandingpage(landingPage: Landingpage): Promise<Landingpage> {
+  async createLandingpage(landingPage: Landingpage): Promise<Landingpage| null> {
     const createdLandingPage = await this.dataSource.createLandingPage(
       landingPageEntitiyToModel(landingPage)
     );
@@ -20,7 +20,7 @@ export class LandingpageRepositoryImpl implements LandingpageRepository {
   async updateLandingpage(
     landingPage: Landingpage,
     userId: number
-  ): Promise<Landingpage> {
+  ): Promise<Landingpage| null> {
     const updatedLandingPage = await this.dataSource.updateLandingPage(
       landingPageEntitiyToModel(landingPage),
       userId
@@ -28,12 +28,12 @@ export class LandingpageRepositoryImpl implements LandingpageRepository {
     return updatedLandingPage;
   }
 
-  async getLandingpage(userId: number): Promise<Landingpage> {
+  async getLandingpage(userId: number): Promise<Landingpage| null> {
     const getLandingPage = await this.dataSource.getLandingPageByUser(userId);
     return getLandingPage;
   }
 
-  async deleteLandingpage(userId: number): Promise<void> {
+  async deleteLandingpage(userId: number): Promise<void| null> {
     await this.dataSource.deleteLandingPageByUser(userId);
   }
 }

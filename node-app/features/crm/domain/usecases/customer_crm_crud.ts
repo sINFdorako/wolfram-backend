@@ -1,4 +1,5 @@
 import { CustomerCRMRepository } from "../../domain/repositories/customer_crm_repository";
+import { CustomerCRMEntity } from "../entities/customer_crm";
 
 export class CreateCustomer {
     constructor(private customerCRMRepository: CustomerCRMRepository) {}

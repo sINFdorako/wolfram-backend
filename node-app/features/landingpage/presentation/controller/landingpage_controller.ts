@@ -77,7 +77,7 @@ export class LandingpageController {
                 contactPhone: contactPhone
             });
 
-            const result = await this.updateLandingpage.execute(landingpage, );
+            const result = await this.updateLandingpage.execute(landingpage, userId);
 
             res.status(200).send(result);
 

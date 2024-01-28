@@ -10,7 +10,7 @@ import { LandingpageController } from "../controller/landingpage_controller";
 import { ensureAuthenticated } from "../../../authentification/presentation/middlewares/auth_middleware";
 
 const dataSource = new LandingpageDataSource();
-const landingpageRepository: LandingpageRepository = new LandingpageRepositoryImpl(dataSource);
+const landingpageRepository: LandingpageRepository = new LandingpageRepositoryImpl();
 
 const createLandingPage: CreateLandingpage = new CreateLandingpage(landingpageRepository);
 const updateLandingPage: UpdateLandingpage = new UpdateLandingpage(landingpageRepository);

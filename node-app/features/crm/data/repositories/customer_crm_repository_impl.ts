@@ -1,3 +1,4 @@
+import { CustomerCRMEntity } from "../../domain/entities/customer_crm";
 import { CustomerCRMRepository } from "../../domain/repositories/customer_crm_repository";
 import { CustomerCRMDataSource } from "../data_sources/customer_crm_data_source";
 import { customerEntityToModel, modelToCustomerEntity } from "../mappers/customer_crm_mappers";

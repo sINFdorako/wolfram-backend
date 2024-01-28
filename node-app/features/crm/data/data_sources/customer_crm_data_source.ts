@@ -1,9 +1,10 @@
+import { modelToSequelizeData } from "../mappers/customer_crm_mappers";
 import { CustomerCRM } from "../models/customer_crm_model";
 
 export class CustomerCRMDataSource {
   // Create
   async createCustomerInDB(model: CustomerCRM): Promise<CustomerCRM> {
-    const createdModel = await CustomerCRM.create(model);
+    const createdModel = await CustomerCRM.create(modelToSequelizeData(model));
     return createdModel;
   }
 
@@ -22,7 +23,7 @@ export class CustomerCRMDataSource {
       throw new Error("Customer not found");
     }
 
-    const updatedModel = await modelToUpdate.update(model);
+    const updatedModel = await modelToUpdate.update(modelToSequelizeData(model));
 
     return updatedModel;
   }

@@ -1,3 +1,5 @@
+import { CustomerCRMEntity } from "../entities/customer_crm";
+
 export interface CustomerCRMRepository {
     createCustomer(entity: CustomerCRMEntity): Promise<CustomerCRMEntity>;
     getCustomers(userId: number): Promise<CustomerCRMEntity[]>;

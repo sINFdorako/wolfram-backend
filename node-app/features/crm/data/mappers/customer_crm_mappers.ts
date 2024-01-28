@@ -1,8 +1,10 @@
+import { CustomerCRMEntity } from "../../domain/entities/customer_crm";
 import { CustomerCRM } from "../models/customer_crm_model";
 
 export function customerEntityToModel(entity: CustomerCRMEntity): CustomerCRM {
     const model = new CustomerCRM();
-    
+    model.id = entity.id ?? 0;
+    model.userId = entity.userId;
     model.gender = entity.gender;
     model.academicTitle = entity.academicTitle;
     model.customerId = entity.customerId;
@@ -37,6 +39,8 @@ export function customerEntityToModel(entity: CustomerCRMEntity): CustomerCRM {
 
 export function modelToCustomerEntity(model: CustomerCRM): CustomerCRMEntity {
     const entity = new CustomerCRMEntity({
+        id: model.id,
+        userId: model.userId,
         gender: model.gender,
         academicTitle: model.academicTitle,
         customerId: model.customerId,
@@ -69,3 +73,38 @@ export function modelToCustomerEntity(model: CustomerCRM): CustomerCRMEntity {
 
     return entity;
 }
+
+export function modelToSequelizeData(model: CustomerCRM): Partial<CustomerCRM> {
+    return {
+        userId: model.userId,
+        gender: model.gender,
+        academicTitle: model.academicTitle,
+        customerId: model.customerId,
+        firstName: model.firstName,
+        lastName: model.lastName,
+        companyName: model.companyName,
+        position: model.position,
+        email: model.email,
+        landline: model.landline,
+        phone: model.phone,
+        website: model.website,
+        instagram: model.instagram,
+        facebook: model.facebook,
+        tiktok: model.tiktok,
+        street: model.street,
+        houseNumber: model.houseNumber,
+        postalCode: model.postalCode,
+        city: model.city,
+        state: model.state,
+        country: model.country,
+        birthDate: model.birthDate,
+        lifecyclePosition: model.lifecyclePosition,
+        numberOfBookings: model.numberOfBookings,
+        lastAppointment: model.lastAppointment,
+        totalRevenue: model.totalRevenue,
+        outstandingInvoices: model.outstandingInvoices,
+        customerDiscount: model.customerDiscount,
+        newsletterSubscribed: model.newsletterSubscribed,
+    };
+}
+

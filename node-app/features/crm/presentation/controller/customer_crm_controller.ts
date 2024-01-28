@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateCustomer, DeleteCustomer, GetCustomers, UpdateCustomer } from '../../domain/usecases/customer_crm_crud';
+import { CustomerCRMEntity } from '../../domain/entities/customer_crm';
 
 export class CustomerCRMController {
     constructor(
@@ -18,9 +19,11 @@ export class CustomerCRMController {
             const userId = req.user.id;
 
             const customer = new CustomerCRMEntity({ firstName: firstName, lastName: lastName, companyName: companyName, position: position, email: email, landline: landline, phone: phone, website: website, instagram: instagram, facebook: facebook, tiktok: tiktok, street: street, houseNumber: houseNumber, postalCode: postalCode, city: city, state: state, country: country, birthDate: birthDate, lifecyclePosition: lifecyclePosition, numberOfBookings: numberOfBookings, lastAppointment: lastAppointment, totalRevenue: totalRevenue, outstandingInvoices: outstandingInvoices, customerDiscount: customerDiscount, newsletterSubscribed: newsletterSubscribed, userId: userId });
-            await this.createCustomer.execute(customer);
+            console.log("userId:" ,userId);
+            const customerCreated = await this.createCustomer.execute(customer);
 
             res.status(201).send();
+            res.status(200).json(customerCreated);
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'An error occurred during customer creation' });
@@ -68,7 +71,7 @@ export class CustomerCRMController {
             }
             const userId = req.user?.id;
 
-            await this.deleteCustomer.execute(userId, req.params.id);
+            await this.deleteCustomer.execute(userId, parseInt(req.params.id));
 
             res.status(204).send(); // No Content
         } catch (error) {

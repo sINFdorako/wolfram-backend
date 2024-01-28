@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../../../../core/database_config/database'; // Adjust the path as needed
 
 export class CustomerCRM extends Model {
- public id?: number;
+ public id!: number;
  public userId?: number;
  public gender?: string;
  public academicTitle?: string;

@@ -1,4 +1,4 @@
-class CustomerCRMEntity {
+export class CustomerCRMEntity {
     id?: number;
     userId?: number;
     gender?: string;
